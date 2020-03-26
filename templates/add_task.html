@@ -1,0 +1,30 @@
+<form action='.' method="POST"> {% csrf_token %}
+      <div class="row">
+          <div class="col">
+              <input type="text" class="form-control" name="name" placeholder="Your task">
+          </div>
+          <div class="col">
+              <input type="text" class="form-control" name="category" placeholder="Category">
+          </div>
+          <div class="col">
+              <input type="text" class="form-control" name="info" placeholder="Additional info">
+          </div>
+          <div class="col">
+              <input type="text" class="form-control" name="description" placeholder="Comment">
+          </div>
+           <br>
+      </div>
+          <div class="row col-form-label-sm">
+          <div class="col">
+
+            <label for="start" class="col-sm-2 col-form-label ">Start of task</label>
+                    <input type="date" class="form-control " id="start" name="start_data">
+          </div>
+          <div class="col">
+            <label for="end" class="col-sm-2 col-form-label ">Last day</label>
+                    <input type="date" class="form-control " id="end" name="end_data">
+          </div>
+          </div>
+    <br>
+    <center><button type="submit" class="btn btn-secondary btn-lg btn-block">Add new task</button><br></center>
+</form>
