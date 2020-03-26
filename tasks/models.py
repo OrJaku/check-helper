@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 
 class Task(models.Model):
@@ -9,3 +10,4 @@ class Task(models.Model):
     start_data = models.DateField(null=False)
     end_data = models.DateField()
     done = models.BooleanField(default=False)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user')

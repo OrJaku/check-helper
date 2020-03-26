@@ -1,53 +1,52 @@
 {% extends "base.html" %}
 {% block page %}
- <body id="home">
-    <h4>User: {{request.user}}</h4>
-    {% include 'add_task.html' %}<br>
+ <body>
+    <h5><b>{{request.user}}'s</b> tasks</h5>
 
  <table class="table">
   <thead class="thead-dark">
     <tr>
-        <th scope="col">#</th>
+        <th scope="col"></th>
         <th scope="col">Task</th>
-        <th scope="col">Category</th>
         <th scope="col">Info</th>
+        <th scope="col">Category</th>
         <th scope="col">Comment</th>
         <th scope="col">Start day</th>
         <th scope="col">Last day</th>
-        <th scope="col">Status</th>
-
+        <th scope="col"><center>Status</center></th>
     </tr>
   </thead>
-  <tbody>{%for task in objects%}
+  <tbody>
+  {%for task in objects%}
 
-        {%if task.done == False %}
-            <tr class={{status}}>
-        {%else%}
-            <tr class="">
-        {%endif%}
-
-        <th scope="row"></th>
-        <td><b>{{task.name}}</b></td>
-        <td>{{task.category}}</td>
-        <td>{{task.info}}</td>
-        <td>{{task.description}}</td>
-        <td>{{task.start_data}}</td>
-        <td>{{task.end_data}}</td>
-        <td>
-            {% if task.done == False %}
-                <button type="button" class="btn btn-success">Done</button>
-            {%else%}
-                <button type="button" class="btn btn-danger">In progress</button>
-            {%endif%}
-        </td>
-    </tr>
-              {%endfor%}
+    {%if task.done == True %}
+        <tr class="table-success">
+    {%else%}
+        <tr class="">
+    {%endif%}
+            <th scope="row"></th>
+            <td><b>{{task.name}}</b></td>
+            <td>{{task.info}}</td>
+            <td>{{task.category}}</td>
+            <td>{{task.description}}</td>
+            <td>{{task.start_data}}</td>
+            <td>{{task.end_data}}</td>
+            <td>
+                <center>
+                    <form method="POST" action="/change_task_status/">{% csrf_token %}
+                        {% if task.done == True %}
+                            <button name="change_status" value={{task.id}} type="submit" class="btn btn-success">Done</button>
+                        {%else%}
+                            <button name="change_status" value={{task.id}} type="submit" class="btn btn-danger">In progress</button>
+                        {%endif%}
+                    </form>
+                </center>
+            </td>
+        </tr>
+  {%endfor%}
   </tbody>
-</table>
-  </body>
+</table><br>
+    {% include 'add_task.html' %}
+ </body>
 {% endblock %}
 
-
-<!--  <tr {%if task.done == False %}-->
-<!--            class="table-success"-->
-<!--        {%endif%}>-->

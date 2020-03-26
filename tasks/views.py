@@ -27,16 +27,30 @@ def tasks_list(request):
                                     description=description,
                                     start_data=start_data,
                                     end_data=end_data,
+                                    user=request.user
                                     )
         new_task.save()
         return redirect('/tasks_list/')
 
-    tasks = Task.objects.all()
+    tasks_user = Task.objects.all().filter(user=request.user).order_by("end_data")
+
     context = {
-        'objects': tasks,
-        'status': "table-success"
+        'objects': tasks_user,
     }
     return render(request, 'tasks_list.html', context)
+
+
+def change_task_status(request):
+    if request.method == "POST":
+        task_id = request.POST["change_status"]
+        task = Task.objects.get(id=task_id)
+        if task.done:
+            task.done = False
+        else:
+            task.done = True
+        task.save()
+        return redirect('/tasks_list/')
+    return render(request, 'tasks_list.html', {})
 
 
 def user_login(request):
