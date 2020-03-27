@@ -1,7 +1,18 @@
 {% extends "base.html" %}
 {% block page %}
- <body>
+
+<body>
     <h5><b>{{request.user}}'s</b> tasks</h5>
+    <p>
+      <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+          New task +
+      </button>
+    </p>
+    <div class="collapse" id="collapseExample">
+        <div class="card card-body">
+              {% include 'add_task.html' %}
+        </div>
+    </div>
 
  <table class="table">
   <thead class="thead-dark">
@@ -46,7 +57,6 @@
   {%endfor%}
   </tbody>
 </table><br>
-    {% include 'add_task.html' %}
  </body>
 {% endblock %}
 
