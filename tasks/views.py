@@ -50,14 +50,26 @@ def task_detail(request, task_id):
 @login_required(login_url='/user_login/')
 def change_task_status(request):
     if request.method == "POST":
-        task_id = request.POST["change_status"]
+        list_ = False
+        if "change_status" in request.POST:
+            task_id = request.POST.get("change_status")
+
+        elif "change_status_list" in request.POST:
+            task_id = request.POST.get("change_status_list")
+            list_ = True
+        else:
+            task_id = None
+
         task = Task.objects.get(id=task_id)
         if task.done:
             task.done = False
         else:
             task.done = True
         task.save()
-        return redirect(f"/tasks_list/{task_id}")
+        if list_:
+            return redirect("/tasks_list/")
+        else:
+            return redirect(f"/tasks_list/{task_id}")
     return render(request, 'tasks_list.html', {})
 
 

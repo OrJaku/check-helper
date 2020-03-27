@@ -4,7 +4,7 @@
 <body>
     <h5><b>{{request.user}}'s</b> tasks</h5>
     <p>
-      <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+      <button class="btn btn-primary " type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
           New task +
       </button>
     </p>
@@ -46,9 +46,9 @@
                 <center>
                     <form method="POST" action="/change_task_status/">{% csrf_token %}
                         {% if task.done == True %}
-                            <button name="change_status" value={{task.id}} type="submit" class="btn btn-success">Done</button>
+                            <button name="change_status_list" value={{task.id}} type="submit" class="btn btn-success">Done</button>
                         {%else%}
-                            <button name="change_status" value={{task.id}} type="submit" class="btn btn-danger">In progress</button>
+                            <button name="change_status_list" value={{task.id}} type="submit" class="btn btn-danger">In progress</button>
                         {%endif%}
                     </form>
                 </center>

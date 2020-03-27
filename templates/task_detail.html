@@ -7,15 +7,15 @@
     <li class="nav-item">
         <form method="POST" action="/change_task_status/">{% csrf_token %}
             {% if task.done == True %}
-                <button name="change_status" value={{task.id}} type="submit" class="btn btn-success">Done</button>
+                <button name="change_status" value={{task.id}} type="submit" class="btn btn-success ">Done</button>
             {%else%}
-                <button name="change_status" value={{task.id}} type="submit" class="btn btn-danger">In progress</button>
+                <button name="change_status" value={{task.id}} type="submit" class="btn btn-danger ">In progress</button>
             {%endif%}
         </form>
     </li>
     <li class="nav-item">
         <form method="POST" action="/delete_task/">{% csrf_token %}
-            <button name="delete_task" value={{task.id}} class="btn btn-primary">Delete task </button>
+            <button name="delete_task" value={{task.id}} class="btn btn-primary ">Delete task </button>
         </form>
     </li>
 </ul><br>
