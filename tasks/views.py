@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
+import time
 from .models import Task
 
 
@@ -40,6 +41,16 @@ def tasks_list(request):
     return render(request, 'tasks_list.html', context)
 
 
+@login_required(login_url='/user_login/')
+def task_detail(request, task_id):
+    task = Task.objects.get(id=task_id)
+    time_data = time.strftime("%Y%m%d-%H%M%S")
+    context = {
+        'task': task,
+    }
+    return render(request, 'task_detail.html', context)
+
+
 def change_task_status(request):
     if request.method == "POST":
         task_id = request.POST["change_status"]
@@ -49,7 +60,16 @@ def change_task_status(request):
         else:
             task.done = True
         task.save()
-        return redirect('/tasks_list/')
+        return redirect(f"/tasks_list/{task_id}")
+    return render(request, 'tasks_list.html', {})
+
+
+def update_task(request, task_id):
+    if request.method == "POST":
+        task = Task.objects.get(id=task_id)
+        task.name = request.POST["name"]
+        print(task.name)
+        return redirect(f'/tasks_list/{task_id}')
     return render(request, 'tasks_list.html', {})
 
 

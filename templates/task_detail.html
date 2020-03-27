@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block page %}
+ <body id="">
+    <h5><b>{{request.user}}'s</b> task</h5><br>
+    {% if task.done == True %}
+        <h5> <font color="green">Task <b>{{task.name}}</b> is already finish !</font></h5>
+    {%else%}
+        <h5> <font color="red">Task <b>{{task.name}}</b> is still in progress !</font></h5>
+    {%endif%}
+<!--    <form method="POST" action="/tasks_list/{{task.id}}/update_task">{% csrf_token %}-->
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item"><b>ID:</b>
+                {{task.id}}
+            </li>
+            <li class="list-group-item"><b>Task:</b>
+                <input class="form-control" name='name' value={{task.name}} >
+            </li>
+            <li class="list-group-item"><b>Info:</b>
+                <input class="form-control" name='info' value={{task.info}}>
+            </li>
+            <li class="list-group-item"><b>Category:</b>
+                <input class="form-control" name='category' value={{task.category}} >
+            </li>
+            <li class="list-group-item"><b>Comment: </b>
+                <input class="form-control" name='description' value={{task.description}}>
+            </li>
+            <li class="list-group-item"><b>Start day: {{task.start_data}}</b>
+                <input type="date" class="form-control" name='start_data'>
+            </li>
+            <li class="list-group-item list-group-item-warning"><b>Deadline: {{task.end_data}}</b>
+                <input type="date" class="form-control" name='end_data'>
+            </li>
+            <li class="list-group-item ">Current status:
+                <form method="POST" action="/change_task_status/">{% csrf_token %}
+                    {% if task.done == True %}
+                        <button name="change_status" value={{task.id}} type="submit" class="btn btn-success">Done</button>
+                    {%else%}
+                        <button name="change_status" value={{task.id}} type="submit" class="btn btn-danger">In progress</button>
+                    {%endif%}
+                </form>
+            </li>
+        </ul>
+<!--        <center><button type="submit" class="btn btn-primary btn-lg btn-block">Update task</button><br></center>-->
+<!--    </form>-->
+
+ </body>
+{% endblock %}
