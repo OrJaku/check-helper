@@ -17,15 +17,43 @@
  <table class="table">
   <thead class="thead-dark">
     <tr>
-        <th scope="col"></th>
-        <th scope="col">Task</th>
-        <th scope="col">Info</th>
-        <th scope="col">Category</th>
-        <th scope="col">Comment</th>
-        <th scope="col">Start day</th>
-        <th scope="col">Last day</th>
-        <th scope="col"><center>Status</center></th>
-    </tr>
+        <th scope="col">
+        </th>
+        <th scope="col">
+            <form method="POST"  action=".">{% csrf_token %}
+                 <button name="sort" type="submit"  value="name" class="btn btn-secondary">Task</button>
+            </form>
+        </th>
+        <th scope="col">
+            <form method="POST"  action=".">{% csrf_token %}
+                 <button name="sort" type="submit"  value="info" class="btn btn-secondary">Info</button>
+            </form>
+        </th>
+        <th scope="col">
+            <form method="POST" action=".">{% csrf_token %}
+                 <button name="sort" type="submit"  value="category" class="btn btn-secondary">Category</button>
+            </form>
+        </th>
+        <th scope="col">
+            <form method="POST" action=".">{% csrf_token %}
+                 <button name="sort" type="submit"  value="description" class="btn btn-secondary">Comment</button>
+            </form>
+        </th>
+        <th scope="col">
+            <form method="POST" action=".">{% csrf_token %}
+                 <button name="sort" type="submit"  value="start_data" class="btn btn-secondary">First day</button>
+            </form>
+        </th>
+        <th scope="col">
+            <form method="POST" action=".">{% csrf_token %}
+                 <button name="sort" type="submit"  value="end_data" class="btn btn-secondary">Last day</button>
+            </form>
+        </th>
+        <th scope="col">
+            <form method="POST" action=".">{% csrf_token %}
+                 <button name="sort" type="submit"  value="done" class="btn btn-secondary">Status</button>
+            </form>
+        </th>    </tr>
   </thead>
   <tbody>
   {%for task in objects%}

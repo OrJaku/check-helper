@@ -11,26 +11,39 @@ def home(request, *args, **kwargs):
 
 @login_required(login_url='/user_login/')
 def tasks_list(request):
-    if request.method == "POST":
-        name = request.POST.get("name")
-        category = request.POST.get("category")
-        info = request.POST.get("info")
-        description = request.POST.get("description")
-        start_data = request.POST.get("start_data")
-        end_data = request.POST.get("end_data")
-        new_task = Task.objects.create(
-                                    name=name,
-                                    category=category,
-                                    info=info,
-                                    description=description,
-                                    start_data=start_data,
-                                    end_data=end_data,
-                                    user=request.user
-                                    )
-        new_task.save()
-        return redirect('/tasks_list/')
+    sort = "end_data"
 
-    tasks_user = Task.objects.all().filter(user=request.user).order_by("end_data")
+    if request.method == "POST":
+        if "sort" in request.POST:
+            sort = request.POST.get("sort")
+            print("SORT", sort)
+            print(request.POST)
+            if sort[0] == "-":
+                print(sort[0])
+                pass
+            else:
+                sort = "" + sort
+
+        else:
+            name = request.POST.get("name")
+            category = request.POST.get("category")
+            info = request.POST.get("info")
+            description = request.POST.get("description")
+            start_data = request.POST.get("start_data")
+            end_data = request.POST.get("end_data")
+            new_task = Task.objects.create(
+                                        name=name,
+                                        category=category,
+                                        info=info,
+                                        description=description,
+                                        start_data=start_data,
+                                        end_data=end_data,
+                                        user=request.user
+                                        )
+            new_task.save()
+            return redirect('/tasks_list/')
+
+    tasks_user = Task.objects.all().filter(user=request.user).order_by(sort)
 
     context = {
         'objects': tasks_user,
@@ -71,6 +84,10 @@ def change_task_status(request):
         else:
             return redirect(f"/tasks_list/{task_id}")
     return render(request, 'tasks_list.html', {})
+
+
+def sort_tasks(request):
+    pass
 
 
 @login_required(login_url='/user_login/')
