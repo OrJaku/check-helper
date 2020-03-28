@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from .models import Task
+import datetime
 
 
 def home(request, *args, **kwargs):
@@ -12,7 +13,6 @@ def home(request, *args, **kwargs):
 @login_required(login_url='/user_login/')
 def tasks_list(request):
     sort = "end_data"
-
     if request.method == "POST":
         if "sort" in request.POST:
             sort = request.POST.get("sort")
@@ -44,9 +44,26 @@ def tasks_list(request):
             return redirect('/tasks_list/')
 
     tasks_user = Task.objects.all().filter(user=request.user).order_by(sort)
+    tasks_user_archive = Task.objects.all().filter(user=request.user).order_by(sort)
+    current_date = datetime.date.today()
+    date_difference = []
+
+    def zipping(lists):
+        for task in lists:
+            difference = task.end_data - current_date
+            days = str(difference).split(" ")
+            days = int(days[0])
+            date_difference.append(days)
+        zipped_list = zip(tasks_user, date_difference)
+        return zipped_list
+
+    tasks_user_with_date_difference = zipping(tasks_user)
+    tasks_user_archive_with_date_difference = zipping(tasks_user_archive)
 
     context = {
-        'objects': tasks_user,
+        'tasks': tasks_user_with_date_difference,
+        'tasks_archive': tasks_user_archive_with_date_difference,
+
     }
     return render(request, 'tasks_list.html', context)
 

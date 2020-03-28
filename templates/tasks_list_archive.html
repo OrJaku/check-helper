@@ -1,0 +1,29 @@
+{%for task, diff in tasks_archive%}
+                {{task.name}}
+<!--                {%if diff < 10%}-->
+                    {%if task.done == True %}
+                        <tr class="table-success">
+                    {%else%}
+                        <tr class="">
+                    {%endif%}
+                        <th scope="row"></th>
+                        <td><b><a href="/tasks_list/{{task.id}}">{{task.name}} ({{task.id}})</a></b></td>
+                        <td>{{task.info}}</td>
+                        <td>{{task.category}}</td>
+                        <td>{{task.description}}</td>
+                        <td>{{task.start_data}}</td>
+                        <td>{{task.end_data}} ({{diff}})</td>
+                        <td>
+                            <center>
+                                <form method="POST" action="/change_task_status/">{% csrf_token %}
+                                    {% if task.done == True %}
+                                        <button name="change_status_list" value={{task.id}} type="submit" class="btn btn-success">Done</button>
+                                    {%else%}
+                                        <button name="change_status_list" value={{task.id}} type="submit" class="btn btn-danger">In progress</button>
+                                    {%endif%}
+                                </form>
+                            </center>
+                        </td>
+                    </tr>
+<!--                {%endif%}-->
+            {%endfor%}

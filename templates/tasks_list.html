@@ -56,20 +56,26 @@
         </th>    </tr>
   </thead>
   <tbody>
-  {%for task in objects%}
-
-    {%if task.done == True %}
-        <tr class="table-success">
-    {%else%}
-        <tr class="">
-    {%endif%}
+  {%for task, diff in tasks%}
+    {%if diff >= 0 or task.done == False %}
+        {%if task.done == True %}
+            <tr class="table-success">
+        {%else%}
+            <tr class="">
+        {%endif%}
             <th scope="row"></th>
-            <td><b><a href="/tasks_list/{{task.id}}">{{task.name}}</a></b></td>
+            <td><b><a href="/tasks_list/{{task.id}}">{{task.name}} </a></b>
+                <font size="3" color="gray">[{{task.id}}]</font>
+            </td>
             <td>{{task.info}}</td>
             <td>{{task.category}}</td>
             <td>{{task.description}}</td>
             <td>{{task.start_data}}</td>
-            <td>{{task.end_data}}</td>
+            <td>{{task.end_data}} {%if diff <= 2 %}
+                <font color=#e3493d><b>({{diff}})</b></font></td>
+                {%else%}
+                    <b>({{diff}})</b>
+                {%endif%}
             <td>
                 <center>
                     <form method="POST" action="/change_task_status/">{% csrf_token %}
@@ -82,9 +88,70 @@
                 </center>
             </td>
         </tr>
+    {%endif%}
   {%endfor%}
+
+
   </tbody>
 </table><br>
+
+<div class="accordion" id="accordionExample">
+  <div class="card">
+    <div class="card-header" id="headingOne">
+      <h2 class="mb-0">
+        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+          Tasks archive
+        </button>
+      </h2>
+    </div>
+    <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+      <div class="card-body">
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+            </tr>
+          </thead>
+         <tbody>
+         {%for task, diff in tasks_archive%}
+            {%if diff < 0%}
+                {%if task.done == True %}
+                    <tr class="table-success">
+                {%else%}
+                    <tr class="">
+                {%endif%}
+                    <th scope="row"></th>
+                    <td><b><a href="/tasks_list/{{task.id}}">{{task.name}} </a></b>
+                        <font size="3" color="gray">[{{task.id}}]</font>
+                    </td>
+                    <td>{{task.info}}</td>
+                    <td>{{task.category}}</td>
+                    <td>{{task.description}}</td>
+                    <td>{{task.start_data}}</td>
+                    <td>{{task.end_data}} {%if diff <= 2 %}
+                        <font color=#e3493d>({{diff}})</font></td>
+                        {%else%}
+                            ({{diff}})
+                        {%endif%}
+                    <td>
+                        <center>
+                            <form method="POST" action="/change_task_status/">{% csrf_token %}
+                                {% if task.done == True %}
+                                    <button name="change_status_list" value={{task.id}} type="submit" class="btn btn-success">Done</button>
+                                {%else%}
+                                    <button name="change_status_list" value={{task.id}} type="submit" class="btn btn-danger">In progress</button>
+                                {%endif%}
+                            </form>
+                        </center>
+                    </td>
+                </tr>
+            {%endif%}
+          {%endfor%}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
  </body>
 {% endblock %}
 
