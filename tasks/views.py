@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from .models import Task
 import datetime
+from datetime import timedelta
 
 
 def home(request, *args, **kwargs):
@@ -13,6 +14,8 @@ def home(request, *args, **kwargs):
 @login_required(login_url='/user_login/')
 def tasks_list(request):
     sort = "end_data"
+    current_date = datetime.date.today()
+
     if request.method == "POST":
         if "sort" in request.POST:
             sort = request.POST.get("sort")
@@ -23,14 +26,34 @@ def tasks_list(request):
                 pass
             else:
                 sort = "" + sort
-
         else:
             name = request.POST.get("name")
             category = request.POST.get("category")
             info = request.POST.get("info")
+            if name == "":
+                name = 'Empty'
             description = request.POST.get("description")
             start_data = request.POST.get("start_data")
+            if start_data == "":
+                start_data = current_date
+            else:
+                pass
+            try:
+                delta = int(request.POST.get("delta"))
+            except ValueError:
+                delta = ""
+
+            if delta == "":
+                delta = 10
+            else:
+                pass
+
             end_data = request.POST.get("end_data")
+            if end_data == "":
+                end_data = current_date + timedelta(delta)
+            else:
+                pass
+
             new_task = Task.objects.create(
                                         name=name,
                                         category=category,
@@ -45,7 +68,6 @@ def tasks_list(request):
 
     tasks_user = Task.objects.all().filter(user=request.user).order_by(sort)
     tasks_user_archive = Task.objects.all().filter(user=request.user).order_by(sort)
-    current_date = datetime.date.today()
     date_difference = []
 
     def zipping(lists):

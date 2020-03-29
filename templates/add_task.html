@@ -16,13 +16,16 @@
       </div>
           <div class="row col-form-label-sm">
           <div class="col">
-
-            <label for="start" class="col-sm-2 col-form-label ">First day</label>
+              <label  >First day <font color="gray">(default = current date)</font></label>
                     <input type="date" class="form-control" id="start" name="start_data">
           </div>
           <div class="col">
-            <label for="end" class="col-sm-2 col-form-label ">Last day</label>
+            <label for="end">Last day <font color="gray">(default = First day + delta)</font></label>
                     <input type="date" class="form-control" id="end" name="end_data">
+          </div>
+                   <div class="col">
+            <label for="delta">Days: <font color="gray">(default = 10 days)</font></label>
+                    <input type="text" class="form-control" id="delta" name="delta">
           </div>
           </div>
     <br>
