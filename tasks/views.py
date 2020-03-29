@@ -52,7 +52,10 @@ def tasks_list(request):
         for task in lists:
             difference = task.end_data - current_date
             days = str(difference).split(" ")
-            days = int(days[0])
+            try:
+                days = int(days[0])
+            except ValueError:
+                days = 0
             date_difference.append(days)
         zipped_list = zip(tasks_user, date_difference)
         return zipped_list
