@@ -10,4 +10,5 @@ class Task(models.Model):
     start_data = models.DateField(null=False)
     end_data = models.DateField()
     done = models.BooleanField(default=False)
+    priority = models.IntegerField(default=1)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user')

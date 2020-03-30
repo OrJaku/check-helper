@@ -21,41 +21,48 @@
         </th>
         <th scope="col">
             <form method="POST"  action=".">{% csrf_token %}
-                 <button name="sort" type="submit"  value="name" class="btn btn-secondary">Task</button>
+                 <button name="sort" type="submit"  value="name" class="btn btn-secondary btn-sm">Task</button>
             </form>
         </th>
         <th scope="col">
             <form method="POST"  action=".">{% csrf_token %}
-                 <button name="sort" type="submit"  value="info" class="btn btn-secondary">Info</button>
+                 <button name="sort" type="submit"  value="info" class="btn btn-secondary btn-sm">Info</button>
             </form>
         </th>
         <th scope="col">
             <form method="POST" action=".">{% csrf_token %}
-                 <button name="sort" type="submit"  value="category" class="btn btn-secondary">Category</button>
+                 <button name="sort" type="submit"  value="category" class="btn btn-secondary btn-sm">Category</button>
             </form>
         </th>
         <th scope="col">
             <form method="POST" action=".">{% csrf_token %}
-                 <button name="sort" type="submit"  value="description" class="btn btn-secondary">Comment</button>
+                 <button name="sort" type="submit"  value="description" class="btn btn-secondary btn-sm">Comment</button>
             </form>
         </th>
         <th scope="col">
             <form method="POST" action=".">{% csrf_token %}
-                 <button name="sort" type="submit"  value="start_data" class="btn btn-secondary">First day</button>
+                 <button name="sort" type="submit"  value="-priority" class="btn btn-secondary btn-sm">Prio</button>
             </form>
         </th>
         <th scope="col">
             <form method="POST" action=".">{% csrf_token %}
-                 <button name="sort" type="submit"  value="end_data" class="btn btn-secondary">Last day</button>
+                 <button name="sort" type="submit"  value="start_data" class="btn btn-secondary btn-sm">First day</button>
             </form>
         </th>
         <th scope="col">
             <form method="POST" action=".">{% csrf_token %}
-                 <button name="sort" type="submit"  value="done" class="btn btn-secondary">Status</button>
+                 <button name="sort" type="submit"  value="end_data" class="btn btn-secondary btn-sm">Last day</button>
             </form>
-        </th>    </tr>
+        </th>
+        <th scope="col">
+            <form method="POST" action=".">{% csrf_token %}
+                 <button name="sort" type="submit"  value="done" class="btn btn-secondary btn-sm">Status</button>
+            </form>
+        </th>
+    </tr>
   </thead>
   <tbody>
+
   {%for task, diff in tasks%}
     {%if diff >= 0 or task.done == False %}
         {%if task.done == True %}
@@ -63,6 +70,7 @@
         {%else%}
             <tr class="">
         {%endif%}
+
             <th scope="row"></th>
             <td><b><a href="/tasks_list/{{task.id}}">{{task.name}} </a></b>
                 <font size="3" color="gray">[{{task.id}}]</font>
@@ -70,6 +78,7 @@
             <td>{{task.info}}</td>
             <td>{{task.category}}</td>
             <td>{{task.description}}</td>
+            <td><center>{{task.priority}}</center></td>
             <td>{{task.start_data}}</td>
             <td>{{task.end_data}} {%if diff <= 2 %}
                 <font color=#e3493d><b>({{diff}})</b></font></td>
@@ -80,9 +89,9 @@
                 <center>
                     <form method="POST" action="/change_task_status/">{% csrf_token %}
                         {% if task.done == True %}
-                            <button name="change_status_list" value={{task.id}} type="submit" class="btn btn-success">Done</button>
+                            <button name="change_status_list" value={{task.id}} type="submit" class="btn btn-success ">Done</button>
                         {%else%}
-                            <button name="change_status_list" value={{task.id}} type="submit" class="btn btn-danger">In progress</button>
+                            <button name="change_status_list" value={{task.id}} type="submit" class="btn btn-danger btn-sm" >In progress</button>
                         {%endif%}
                     </form>
                 </center>
@@ -90,7 +99,6 @@
         </tr>
     {%endif%}
   {%endfor%}
-
 
   </tbody>
 </table><br>

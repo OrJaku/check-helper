@@ -28,12 +28,20 @@ def tasks_list(request):
                 sort = "" + sort
         else:
             name = request.POST.get("name")
+
             category = request.POST.get("category")
             category = category.title()
+
             info = request.POST.get("info")
             if name == "":
                 name = 'Empty'
+            else:
+                pass
+
             description = request.POST.get("description")
+
+            priority = request.POST.get("priority")
+
             start_data = request.POST.get("start_data")
             if start_data == "":
                 start_data = current_date
@@ -62,7 +70,8 @@ def tasks_list(request):
                                         description=description,
                                         start_data=start_data,
                                         end_data=end_data,
-                                        user=request.user
+                                        priority=priority,
+                                        user=request.user,
                                         )
             new_task.save()
             return redirect('/tasks_list/')
@@ -152,6 +161,7 @@ def update_task(request, task_id):
         task.category = request.POST.get("category")
         task.info = request.POST.get("info")
         task.description = request.POST.get("description")
+        task.priority = request.POST.get("priority")
 
         start_data = request.POST.get("start_data")
         if start_data == "":

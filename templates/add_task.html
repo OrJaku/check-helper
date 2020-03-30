@@ -23,10 +23,18 @@
             <label for="end">Last day <font color="gray">(default = First day + delta)</font></label>
                     <input type="date" class="form-control" id="end" name="end_data">
           </div>
-                   <div class="col">
+              <div class="col">
             <label for="delta">Days: <font color="gray">(default = 10 days)</font></label>
                     <input type="text" class="form-control" id="delta" name="delta">
           </div>
+              <div class="col">
+                  <label>Priority: <font color="gray">(1-low, 2-mid, 3-high priority)</font></label>
+                      <select name='priority' class="custom-select" id="inputGroupSelect01">
+                          <option value=1>1</option>
+                          <option value=2>2</option>
+                          <option value=3>3</option>
+                      </select>
+              </div>
           </div>
     <br>
     <center><button type="submit" class="btn btn-primary btn-lg btn-block">Add new task</button><br></center>

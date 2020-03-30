@@ -53,6 +53,15 @@
       <th scope="row"><b>Comment: </b>
           <textarea  class="form-control" rows="1" cols="1"  name='description' >{{task.description}}</textarea></th>
     </tr>
+    <tr>
+      <th scope="row"><b>Priority: {{task.priority}}</b>
+          <select name='priority' class="custom-select" id="inputGroupSelect01">
+              <option value={{task.priority}}>-</option>
+              <option value=1>1</option>
+              <option value=2>2</option>
+              <option value=3>3</option>
+          </select></th>
+    </tr>
       <tr>
       <th scope="row"><b>Start day: {{task.start_data}}</b>
                 <input type="date" class="form-control" name='start_data'></th>
