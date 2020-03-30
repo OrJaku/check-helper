@@ -29,6 +29,7 @@ def tasks_list(request):
         else:
             name = request.POST.get("name")
             category = request.POST.get("category")
+            category = category.title()
             info = request.POST.get("info")
             if name == "":
                 name = 'Empty'
