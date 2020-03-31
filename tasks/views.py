@@ -13,8 +13,33 @@ def home(request, *args, **kwargs):
 
 @login_required(login_url='/user_login/')
 def tasks_list(request):
+
+    def new_task(
+            name_task,
+            category_task,
+            info_task,
+            description_task,
+            start_data_task,
+            end_data_task,
+            priority_task,
+            user
+            ):
+        task = Task.objects.create(
+                                name=name_task,
+                                category=category_task,
+                                info=info_task,
+                                description=description_task,
+                                start_data=start_data_task,
+                                end_data=end_data_task,
+                                priority=priority_task,
+                                user=user,
+                                )
+        return task
+
     sort = "end_data"
     current_date = datetime.date.today()
+    # daily_task = " ".join(current_date
+    # if
 
     if request.method == "POST":
         if "sort" in request.POST:
@@ -63,17 +88,7 @@ def tasks_list(request):
             else:
                 pass
 
-            new_task = Task.objects.create(
-                                        name=name,
-                                        category=category,
-                                        info=info,
-                                        description=description,
-                                        start_data=start_data,
-                                        end_data=end_data,
-                                        priority=priority,
-                                        user=request.user,
-                                        )
-            new_task.save()
+            new_task(name, category, info, description, start_data, end_data, priority, request.user).save()
             return redirect('/tasks_list/')
 
     tasks_user = Task.objects.all().filter(user=request.user).order_by(sort)
