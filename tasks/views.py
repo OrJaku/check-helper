@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
-from .models import Task, Brand
+from .models import Task, Brand, DailyTask
 import datetime
 from datetime import timedelta
 
@@ -177,7 +177,6 @@ def delete_task(request):
     if request.method == "POST":
         task_id = request.POST["delete_task"]
         task = Task.objects.get(id=task_id)
-        print("TASK", task)
         task.delete()
         return redirect(f"/tasks_list/")
     return render(request, 'tasks_list.html', {})
@@ -210,7 +209,16 @@ def update_task(request, task_id):
 
 
 def settings(request):
-    return render(request, 'settings.html', {})
+    if request.method == "POST":
+        tag = request.POST.get("tag")
+        name = request.POST.get("name")
+        category = request.POST.get("category")
+        description = request.POST.get("description")
+    # tasks_user = DailyTask.objects.all().filter(user=request.user).filter(brand=1).order_by(sort)
+    context = {
+
+    }
+    return render(request, 'settings.html', context)
 
 
 def user_login(request):

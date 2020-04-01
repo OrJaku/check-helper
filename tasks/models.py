@@ -30,5 +30,8 @@ class DailyTask(models.Model):
     category = models.CharField(max_length=20, null=False)
     description = models.CharField(max_length=100)
     tag = models.CharField(max_length=20, null=False)
+    # user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_daily')
 
+    def __str__(self):
+        return 'Tag: %s' % self.tag
 
