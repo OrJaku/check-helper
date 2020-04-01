@@ -8,6 +8,7 @@
           New task +
       </button>
     </p>
+
     <div class="collapse" id="collapseExample">
         <div class="card card-body">
               {% include 'add_task.html' %}
@@ -62,6 +63,41 @@
     </tr>
   </thead>
   <tbody>
+
+    {%for task, diff in tasks_daily%}
+    {%if diff >= 0 or task.done == False %}
+        {%if task.done == True %}
+
+      <tr class="table-success">
+        {%else%}
+            <tr class="table-warning" >
+        {%endif%}
+            <th scope="row"></th>
+            <td><b><a href="/tasks_list/{{task.id}}">{{task.name}} </a></b>
+                <font size="3" color="gray">[{{task.id}}]</font>
+            </td>
+            <td><font color="#3366ff">{{task.end_data}}</font></td>
+            <td><font color="#3366ff">{{task.category}}</font></td>
+            <td><font color="#3366ff">{{task.description}}</font></td>
+            <td><center><font color="#3366ff">-</font></center></td>
+            <td><font color="#3366ff">-</font></td>
+            <td><font color="#3366ff">-</font></td>
+
+            <td>
+                <center>
+                    <form method="POST" action="/change_task_status/">{% csrf_token %}
+                        {% if task.done == True %}
+                            <button name="change_status_list" value={{task.id}} type="submit" class="btn btn-success ">Done</button>
+                        {%else%}
+                            <button name="change_status_list" value={{task.id}} type="submit" class="btn btn-danger btn-sm" >In progress</button>
+                        {%endif%}
+                    </form>
+                </center>
+            </td>
+                </tr>
+        {%endif%}
+  {%endfor%}
+
 
   {%for task, diff in tasks%}
     {%if diff >= 0 or task.done == False %}

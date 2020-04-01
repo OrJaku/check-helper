@@ -25,9 +25,9 @@
     <tr>
       <th scope="col">
         {% if task.done == True %}
-            <h5> <font color=#57d624>Task <b>`{{task.name}}`</b> is already finish !</font></h5>
+            <h5> <font color=#57d624><b>`{{task.name}}`</b> is Done !</font></h5>
         {%else%}
-          <h5> <font color="#e3493d">Task <b>`{{task.name}}`</b> is still in progress !</font></h5>
+          <h5> <font color="#e3493d"><b>`{{task.name}}`</b> in progress </font></h5>
         {%endif%}
       </th>
     </tr>
@@ -35,15 +35,17 @@
 
   <tbody>
     <tr>
-      <th scope="row">ID:{{task.id}}</th>
+      <th scope="row">ID:{{task.id}} {{task.brand.id}}</th>
     </tr>
     <tr>
         <th scope="row"><b>Task: </b>
           <textarea class="form-control" rows="1" cols="1"  name='name' >{{task.name}}</textarea></th>
     </tr>
-    <tr>
-        <th scope="row"><b>Info:</b>
-          <textarea  class="form-control" rows="1" cols="1"  name='info' >{{task.info}}</textarea></th>
+    {%if task.brand.id == 1 %}
+        <tr>
+            <th scope="row"><b>Info:</b>
+              <textarea  class="form-control" rows="1" cols="1"  name='info' >{{task.info}}</textarea></th>
+    {%endif%}
     </tr>
       <tr>
       <th scope="row"><b>Category:</b>
@@ -53,6 +55,7 @@
       <th scope="row"><b>Comment: </b>
           <textarea  class="form-control" rows="1" cols="1"  name='description' >{{task.description}}</textarea></th>
     </tr>
+    {%if task.brand.id == 1 %}
     <tr>
       <th scope="row"><b>Priority: {{task.priority}}</b>
           <select name='priority' class="custom-select" id="inputGroupSelect01">
@@ -66,9 +69,13 @@
       <th scope="row"><b>Start day: {{task.start_data}}</b>
                 <input type="date" class="form-control" name='start_data'></th>
     </tr>
+    {%endif%}
+
      <tr>
       <th scope="row"><b>Deadline: {{task.end_data}}</b>
-                <input type="date" class="form-control" name='end_data'>
+              {%if task.brand.id == 1 %}
+                 <input type="date" class="form-control" name='end_data'>
+              {%endif%}
     </tr>
   </tbody>
 </table>

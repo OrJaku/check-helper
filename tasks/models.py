@@ -24,3 +24,11 @@ class Task(models.Model):
     def __str__(self):
         return 'Task: %s' % self.name
 
+
+class DailyTask(models.Model):
+    name = models.CharField(max_length=100, null=False)
+    category = models.CharField(max_length=20, null=False)
+    description = models.CharField(max_length=100)
+    tag = models.CharField(max_length=20, null=False)
+
+

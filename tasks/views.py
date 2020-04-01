@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
-from .models import Task
+from .models import Task, Brand
 import datetime
 from datetime import timedelta
 
@@ -19,10 +19,11 @@ def tasks_list(request):
             category_task,
             info_task,
             description_task,
+            priority_task,
+            user,
             start_data_task,
             end_data_task,
-            priority_task,
-            user
+            brand=Brand.objects.get(id=1),
             ):
         task = Task.objects.create(
                                 name=name_task,
@@ -32,20 +33,39 @@ def tasks_list(request):
                                 start_data=start_data_task,
                                 end_data=end_data_task,
                                 priority=priority_task,
+                                brand=brand,
                                 user=user,
                                 )
         return task
 
     sort = "end_data"
     current_date = datetime.date.today()
-    # daily_task = " ".join(current_date
-    # if
+
+    tasks_user = Task.objects.all().filter(user=request.user).filter(brand=1).order_by(sort)
+    tasks_daily_user = Task.objects.all().filter(user=request.user).filter(brand=2).order_by(sort)
+
+    tasks_user_archive = Task.objects.all().filter(user=request.user).order_by(sort)
+
+    clear_task_list = [name[0] for name in tasks_daily_user.values_list('info')]
+    daily_task_info = str(current_date)
+    if daily_task_info not in clear_task_list:
+        new_task(
+                "Daily task",
+                "category",
+                daily_task_info,
+                "description",
+                1,
+                request.user,
+                current_date,
+                current_date,
+                Brand.objects.get(id=2),
+                ).save()
+    else:
+        pass
 
     if request.method == "POST":
         if "sort" in request.POST:
             sort = request.POST.get("sort")
-            print("SORT", sort)
-            print(request.POST)
             if sort[0] == "-":
                 print(sort[0])
                 pass
@@ -87,15 +107,12 @@ def tasks_list(request):
                 end_data = current_date + timedelta(delta)
             else:
                 pass
-
-            new_task(name, category, info, description, start_data, end_data, priority, request.user).save()
+            new_task(name, category, info, description, priority, request.user, start_data, end_data).save()
             return redirect('/tasks_list/')
 
-    tasks_user = Task.objects.all().filter(user=request.user).order_by(sort)
-    tasks_user_archive = Task.objects.all().filter(user=request.user).order_by(sort)
-    date_difference = []
-
     def zipping(lists):
+        date_difference = []
+
         for task in lists:
             difference = task.end_data - current_date
             days = str(difference).split(" ")
@@ -104,15 +121,17 @@ def tasks_list(request):
             except ValueError:
                 days = 0
             date_difference.append(days)
-        zipped_list = zip(tasks_user, date_difference)
+        zipped_list = zip(lists, date_difference)
         return zipped_list
 
     tasks_user_with_date_difference = zipping(tasks_user)
     tasks_user_archive_with_date_difference = zipping(tasks_user_archive)
+    tasks_daily_user_with_date_difference = zipping(tasks_daily_user)
 
     context = {
         'tasks': tasks_user_with_date_difference,
         'tasks_archive': tasks_user_archive_with_date_difference,
+        'tasks_daily': tasks_daily_user_with_date_difference
 
     }
     return render(request, 'tasks_list.html', context)
@@ -153,10 +172,6 @@ def change_task_status(request):
     return render(request, 'tasks_list.html', {})
 
 
-def sort_tasks(request):
-    pass
-
-
 @login_required(login_url='/user_login/')
 def delete_task(request):
     if request.method == "POST":
@@ -192,6 +207,10 @@ def update_task(request, task_id):
         task.save()
         return redirect(f'/tasks_list/{task_id}')
     return render(request, 'tasks_list.html', {})
+
+
+def settings(request):
+    return render(request, 'settings.html', {})
 
 
 def user_login(request):

@@ -8,7 +8,8 @@ from tasks.views import home, \
     change_task_status, \
     task_detail, \
     update_task, \
-    delete_task
+    delete_task, \
+    settings
 
 
 urlpatterns = [
@@ -23,7 +24,9 @@ urlpatterns = [
     path('user_login/', user_login, name='user_login'),
     path('user_logout/', user_logout, name='user_logout'),
     path('change_task_status/', change_task_status, name='change_task_status'),
-    path('delete_task/', delete_task, name='delete_task')
+    path('delete_task/', delete_task, name='delete_task'),
+
+    path('settings/', settings, name='settings')
 ]
 
 
