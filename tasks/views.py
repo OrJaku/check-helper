@@ -54,7 +54,7 @@ def tasks_list(request):
     tasks_daily_settings = DailyTask.objects.all().filter(user=request.user)
 
     for task_daily_settings in tasks_daily_settings:
-        if daily_task_info not in daily_task_list_info and task_daily_settings.name not in daily_task_list_name:
+        if daily_task_info not in daily_task_list_info or task_daily_settings.name not in daily_task_list_name:
             daily_task = DailyTask.objects.get(id=task_daily_settings.id)
             new_task(
                 daily_task.name,
