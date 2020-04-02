@@ -63,6 +63,7 @@
     </tr>
   </thead>
   <tbody>
+<!--#### Daily Tasks ####-->
 
     {%for task, diff in tasks_daily%}
     {%if diff >= 0 or task.done == False %}
@@ -73,10 +74,18 @@
             <tr class="table-warning" >
         {%endif%}
             <th scope="row"></th>
-            <td><b><a href="/tasks_list/{{task.id}}">{{task.name}} </a></b>
+            <td><b>
+                <a href="/tasks_list/{{task.id}}">{{task.name}} </a></b>
                 <font size="3" color="gray">[{{task.id}}]</font>
             </td>
-            <td><font color="#3366ff">{{task.end_data}}</font></td>
+            <td><font color="#3366ff"> {{task.end_data}}
+                    {%if diff == 0%}
+
+                    {%else %}
+                        <font color=#e3493d>[{{diff}}]</font>
+                    {%endif%}
+                    <p><i>(Daily task)</i></font></p>
+            </td>
             <td><font color="#3366ff">{{task.category}}</font></td>
             <td><font color="#3366ff">{{task.description}}</font></td>
             <td><center><font color="#3366ff">-</font></center></td>
@@ -97,7 +106,7 @@
                 </tr>
         {%endif%}
   {%endfor%}
-
+<!--#### Standard Tasks ####-->
 
   {%for task, diff in tasks%}
     {%if diff >= 0 or task.done == False %}
@@ -157,7 +166,7 @@
           </thead>
          <tbody>
          {%for task, diff in tasks_archive%}
-            {%if diff < 0%}
+            {%if diff < 0 and task.done == True %}
                 {%if task.done == True %}
                     <tr class="table-success">
                 {%else%}

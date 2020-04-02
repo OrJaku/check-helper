@@ -41,27 +41,34 @@ def tasks_list(request):
     sort = "end_data"
     current_date = datetime.date.today()
 
-    tasks_user = Task.objects.all().filter(user=request.user).filter(brand=1).order_by(sort)
-    tasks_daily_user = Task.objects.all().filter(user=request.user).filter(brand=2).order_by(sort)
+    tasks_user = Task.objects.all().filter(user=request.user).filter(brand=1)
+    tasks_daily_user = Task.objects.all().filter(user=request.user).filter(brand=2)
 
-    tasks_user_archive = Task.objects.all().filter(user=request.user).order_by(sort)
+    tasks_user_archive = Task.objects.all().filter(user=request.user)
 
-    clear_task_list = [name[0] for name in tasks_daily_user.values_list('info')]
+    daily_task_list_info = [name[0] for name in tasks_daily_user.values_list('info')]
+    daily_task_list_name = [name[0] for name in tasks_daily_user.values_list('name')]
+
     daily_task_info = str(current_date)
-    if daily_task_info not in clear_task_list:
-        new_task(
-                "Daily task",
-                "category",
+
+    tasks_daily_settings = DailyTask.objects.all().filter(user=request.user)
+
+    for task_daily_settings in tasks_daily_settings:
+        if daily_task_info not in daily_task_list_info and task_daily_settings.name not in daily_task_list_name:
+            daily_task = DailyTask.objects.get(id=task_daily_settings.id)
+            new_task(
+                daily_task.name,
+                daily_task.category,
                 daily_task_info,
-                "description",
+                daily_task.description,
                 1,
                 request.user,
                 current_date,
                 current_date,
                 Brand.objects.get(id=2),
                 ).save()
-    else:
-        pass
+        else:
+            pass
 
     if request.method == "POST":
         if "sort" in request.POST:
@@ -124,9 +131,9 @@ def tasks_list(request):
         zipped_list = zip(lists, date_difference)
         return zipped_list
 
-    tasks_user_with_date_difference = zipping(tasks_user)
-    tasks_user_archive_with_date_difference = zipping(tasks_user_archive)
-    tasks_daily_user_with_date_difference = zipping(tasks_daily_user)
+    tasks_user_with_date_difference = zipping(tasks_user.order_by(sort))
+    tasks_user_archive_with_date_difference = zipping(tasks_user_archive.order_by(sort))
+    tasks_daily_user_with_date_difference = zipping(tasks_daily_user.order_by(sort))
 
     context = {
         'tasks': tasks_user_with_date_difference,
@@ -139,11 +146,16 @@ def tasks_list(request):
 
 @login_required(login_url='/user_login/')
 def task_detail(request, task_id):
-    task = Task.objects.get(id=task_id)
-    context = {
-        'task': task,
-    }
-    return render(request, 'task_detail.html', context)
+    try:
+        task = Task.objects.get(id=task_id)
+        context = {
+            'task': task,
+        }
+        return render(request, 'task_detail.html', context)
+
+    except Task.DoesNotExist:
+        context = {}
+        return render(request, 'home.html', context)
 
 
 @login_required(login_url='/user_login/')
@@ -214,11 +226,31 @@ def settings(request):
         name = request.POST.get("name")
         category = request.POST.get("category")
         description = request.POST.get("description")
-    # tasks_user = DailyTask.objects.all().filter(user=request.user).filter(brand=1).order_by(sort)
-    context = {
+        daily_task = DailyTask.objects.create(
+                                        tag=tag,
+                                        name=name,
+                                        category=category,
+                                        description=description,
+                                        user=request.user,
+                                        )
+        daily_task.save()
+    tasks_daily_user = DailyTask.objects.all().filter(user=request.user)
 
+    context = {
+        "tasks_daily_user": tasks_daily_user
     }
     return render(request, 'settings.html', context)
+
+
+@login_required(login_url='/user_login/')
+def delete_daily_task(request):
+    if request.method == "POST":
+        task_id = request.POST["delete_daily_task"]
+        daily_task = DailyTask.objects.get(id=task_id)
+
+        daily_task.delete()
+        return redirect(f"/settings/")
+    return render(request, 'settings.html', {})
 
 
 def user_login(request):

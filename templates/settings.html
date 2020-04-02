@@ -20,5 +20,34 @@
       </div><br>
         <center><button type="submit" class="btn btn-primary btn-lg btn-block">Create daily task</button><br></center>
     </form>
+  <table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Tag</th>
+      <th scope="col">Daily task</th>
+      <th scope="col">Category</th>
+      <th scope="col">Comment</th>
+      <th scope="col">   </th>
+    </tr>
+  </thead>
+  <tbody>
+        {%for task_daily in tasks_daily_user%}
+    <tr>
+        <td>{{task_daily.tag}}</td>
+        <td>{{task_daily.name}}</td>
+        <td>{{task_daily.category}}</td>
+        <td>{{task_daily.description}}</td>
+        <td>
+            <center>
+                <form method="POST" action="/delete_daily_task/">{% csrf_token %}
+                        <button name="delete_daily_task" value={{task_daily.id}} type="submit" class="btn btn-danger btn-sm" >Delete daily task</button>
+                </form>
+            </center>
+        </td>
+    </tr>
+      {%endfor%}
+  </tbody>
+</table>
+
  </body>
 {% endblock %}
