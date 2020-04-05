@@ -3,6 +3,10 @@
  <body id="home">
     <br>
     <h3> This is your To-Do list application</h3><br>
-    <h4> You have to <a  href="/user_login">Login</a> to get access to your Tasks list </h4>
+    {%if not request.user.is_authenticated%}
+        <h4> You have to <a  href="/user_login">Login</a> to get access to your Tasks list </h4>
+    {%else%}
+        <h4> Go to  <a  href="/tasks_list">Your task</a></h4>
+    {%endif%}
  </body>
 {% endblock %}

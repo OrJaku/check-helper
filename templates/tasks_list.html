@@ -148,6 +148,8 @@
   </tbody>
 </table><br>
 
+<!--#### Archive Tasks ####-->
+
 <div class="accordion" id="accordionExample">
   <div class="card">
     <div class="card-header" id="headingOne">
@@ -157,7 +159,7 @@
         </button>
       </h2>
     </div>
-    <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+    <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
       <div class="card-body">
         <table class="table table-bordered">
           <thead>
@@ -176,7 +178,11 @@
                     <td><b><a href="/tasks_list/{{task.id}}">{{task.name}} </a></b>
                         <font size="3" color="gray">[{{task.id}}]</font>
                     </td>
-                    <td>{{task.info}}</td>
+                    <td>{{task.end_data}}<br>
+                    {%if task.brand.id == 2%}
+                        <i>(Daily task)</i>
+                    {%endif%}
+                    </td>
                     <td>{{task.category}}</td>
                     <td>{{task.description}}</td>
                     <td>{{task.start_data}}</td>
