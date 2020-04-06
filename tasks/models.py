@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+import datetime
 
 
 class Brand(models.Model):
@@ -30,6 +31,9 @@ class DailyTask(models.Model):
     category = models.CharField(max_length=20, null=False)
     description = models.CharField(max_length=100)
     tag = models.CharField(max_length=20, null=False)
+    first_date = models.DateField(default=datetime.datetime.now())
+    active = models.BooleanField(default=True)
+    completed = models.IntegerField(default=0)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_daily')
 
     def __str__(self):

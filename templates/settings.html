@@ -27,6 +27,8 @@
       <th scope="col">Daily task</th>
       <th scope="col">Category</th>
       <th scope="col">Comment</th>
+      <th scope="col">Completed days</th>
+      <th scope="col">Active</th>
       <th scope="col">   </th>
     </tr>
   </thead>
@@ -37,6 +39,9 @@
         <td>{{task_daily.name}}</td>
         <td>{{task_daily.category}}</td>
         <td>{{task_daily.description}}</td>
+        <td>{{task_daily.complete}}</td>
+        <td>{{task_daily.active}}</td>
+
         <td>
             <center>
                 <form method="POST" action="/delete_daily_task/">{% csrf_token %}

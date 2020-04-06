@@ -148,7 +148,7 @@
   </tbody>
 </table><br>
 
-<!--#### Archive Tasks ####-->
+<!--#### Archive Tasks Standard ####-->
 
 <div class="accordion" id="accordionExample">
   <div class="card">
@@ -168,7 +168,7 @@
           </thead>
          <tbody>
          {%for task, diff in tasks_archive%}
-            {%if diff < 0 and task.done == True %}
+            {%if diff < 0 and task.done == True and task.brand.id == 1%}
                 {%if task.done == True %}
                     <tr class="table-success">
                 {%else%}
@@ -211,6 +211,7 @@
     </div>
   </div>
 </div>
+
  </body>
 {% endblock %}
 
