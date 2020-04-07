@@ -43,6 +43,22 @@ def tasks_list(request):
 
     tasks_user = Task.objects.all().filter(user=request.user).filter(brand=1)
     tasks_daily_user = Task.objects.all().filter(user=request.user).filter(brand=2)
+    for task_daily_user in tasks_daily_user:
+        difference = task_daily_user.end_data - current_date
+        days = str(difference).split(" ")
+
+        try:
+            days = int(days[0])
+        except ValueError:
+            days = 0
+        if days < 0:
+            if task_daily_user.done is True and task_daily_user.brand.id == 2:
+                DailyTask.objects.get(name=task_daily_user.name).completed += 1
+            else:
+                pass
+            task_daily_user.delete()
+        else:
+            pass
 
     tasks_user_archive = Task.objects.all().filter(user=request.user)
 
@@ -121,13 +137,13 @@ def tasks_list(request):
         date_difference = []
 
         for task in lists:
-            difference = task.end_data - current_date
-            days = str(difference).split(" ")
+            difference_days = task.end_data - current_date
+            numbers_days = str(difference_days).split(" ")
             try:
-                days = int(days[0])
+                numbers_days = int(numbers_days[0])
             except ValueError:
-                days = 0
-            date_difference.append(days)
+                numbers_days = 0
+            date_difference.append(numbers_days)
         zipped_list = zip(lists, date_difference)
         return zipped_list
 
@@ -236,8 +252,25 @@ def settings(request):
         daily_task.save()
     tasks_daily_user = DailyTask.objects.all().filter(user=request.user)
 
+    def zipping(lists):
+        date_difference = []
+
+        for task in lists:
+            difference = datetime.date.today() - task.first_date
+            days = str(difference).split(" ")
+            try:
+                days = int(days[0]) + 1
+            except ValueError:
+                days = 1
+            date_difference.append(days)
+        zipped_list = zip(lists, date_difference)
+        return zipped_list
+
+    tasks_daily_user_with_completed_days = zipping(tasks_daily_user)
+
     context = {
-        "tasks_daily_user": tasks_daily_user
+        "tasks_daily_user": tasks_daily_user,
+        "tasks_daily_user_with_completed_days": tasks_daily_user_with_completed_days
     }
     return render(request, 'settings.html', context)
 

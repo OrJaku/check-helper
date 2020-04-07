@@ -28,18 +28,20 @@
       <th scope="col">Category</th>
       <th scope="col">Comment</th>
       <th scope="col">Completed days</th>
+      <th scope="col">First day</th>
       <th scope="col">Active</th>
       <th scope="col">   </th>
     </tr>
   </thead>
   <tbody>
-        {%for task_daily in tasks_daily_user%}
+        {% for task_daily, difference in tasks_daily_user_with_completed_days %}
     <tr>
         <td>{{task_daily.tag}}</td>
         <td>{{task_daily.name}}</td>
         <td>{{task_daily.category}}</td>
         <td>{{task_daily.description}}</td>
-        <td>{{task_daily.complete}}</td>
+        <td>{{task_daily.completed}}/{{difference}}</td>
+        <td>{{task_daily.first_date}}</td>
         <td>{{task_daily.active}}</td>
 
         <td>
