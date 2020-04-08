@@ -1,8 +1,6 @@
-{% extends "base.html" %}
-{% block page %}
- <body id="home">
-  <h3>Daily tasks</h3>
-    <form method="POST" action="/settings/">{% csrf_token %}
+
+ <body>
+    <form method="POST" action="/tasks_list/">{% csrf_token %}
       <div class="row">
           <div class="col">
               <input type="text" class="form-control" name="tag" placeholder="Tag">
@@ -18,7 +16,7 @@
               <input type="text" class="form-control" name="description" placeholder="Comment">
           </div>
       </div><br>
-        <center><button type="submit" class="btn btn-primary btn-lg btn-block">Create daily task</button><br></center>
+        <center><button type="submit" name="daily" class="btn btn-primary btn-lg btn-block">Create daily task</button><br></center>
     </form>
   <table class="table">
   <thead>
@@ -57,4 +55,3 @@
 </table>
 
  </body>
-{% endblock %}

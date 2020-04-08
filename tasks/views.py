@@ -43,17 +43,19 @@ def tasks_list(request):
 
     tasks_user = Task.objects.all().filter(user=request.user).filter(brand=1)
     tasks_daily_user = Task.objects.all().filter(user=request.user).filter(brand=2)
+
     for task_daily_user in tasks_daily_user:
         difference = task_daily_user.end_data - current_date
         days = str(difference).split(" ")
-
         try:
             days = int(days[0])
         except ValueError:
             days = 0
         if days < 0:
             if task_daily_user.done is True and task_daily_user.brand.id == 2:
-                DailyTask.objects.get(name=task_daily_user.name).completed += 1
+                daily_task_completed = DailyTask.objects.get(name=task_daily_user.name).completed
+                daily_task_completed += 1
+                daily_task_completed .save()
             else:
                 pass
             task_daily_user.delete()
@@ -87,14 +89,31 @@ def tasks_list(request):
             pass
 
     if request.method == "POST":
-        if "sort" in request.POST:
+        if "daily" in request.POST:
+            tag = request.POST.get("tag")
+            name = request.POST.get("name")
+            category = request.POST.get("category")
+            description = request.POST.get("description")
+            daily_task = DailyTask.objects.create(
+                tag=tag,
+                name=name,
+                category=category,
+                description=description,
+                user=request.user,
+            )
+            daily_task.save()
+            return redirect("/tasks_list/")
+
+        elif "sort" in request.POST:
             sort = request.POST.get("sort")
             if sort[0] == "-":
                 print(sort[0])
                 pass
             else:
                 sort = "" + sort
-        else:
+
+        elif "add" in request.POST:
+
             name = request.POST.get("name")
 
             category = request.POST.get("category")
@@ -133,6 +152,27 @@ def tasks_list(request):
             new_task(name, category, info, description, priority, request.user, start_data, end_data).save()
             return redirect('/tasks_list/')
 
+        else:
+            return render(request, 'tasks_list.html', {})
+
+    tasks_daily_user_1 = DailyTask.objects.all().filter(user=request.user)
+
+    def zipping_daily(lists):
+        date_difference1 = []
+
+        for task in lists:
+            difference1 = datetime.date.today() - task.first_date
+            days1 = str(difference1).split(" ")
+            try:
+                days1 = int(days1[0]) + 1
+            except ValueError:
+                days1 = 1
+            date_difference1.append(days1)
+        zipped_list_d = zip(lists, date_difference1)
+        return zipped_list_d
+
+    tasks_daily_user_with_completed_days = zipping_daily(tasks_daily_user_1)
+
     def zipping(lists):
         date_difference = []
 
@@ -154,7 +194,8 @@ def tasks_list(request):
     context = {
         'tasks': tasks_user_with_date_difference,
         'tasks_archive': tasks_user_archive_with_date_difference,
-        'tasks_daily': tasks_daily_user_with_date_difference
+        'tasks_daily': tasks_daily_user_with_date_difference,
+        "tasks_daily_user_with_completed_days": tasks_daily_user_with_completed_days,
 
     }
     return render(request, 'tasks_list.html', context)
@@ -237,42 +278,7 @@ def update_task(request, task_id):
 
 
 def settings(request):
-    if request.method == "POST":
-        tag = request.POST.get("tag")
-        name = request.POST.get("name")
-        category = request.POST.get("category")
-        description = request.POST.get("description")
-        daily_task = DailyTask.objects.create(
-                                        tag=tag,
-                                        name=name,
-                                        category=category,
-                                        description=description,
-                                        user=request.user,
-                                        )
-        daily_task.save()
-    tasks_daily_user = DailyTask.objects.all().filter(user=request.user)
-
-    def zipping(lists):
-        date_difference = []
-
-        for task in lists:
-            difference = datetime.date.today() - task.first_date
-            days = str(difference).split(" ")
-            try:
-                days = int(days[0]) + 1
-            except ValueError:
-                days = 1
-            date_difference.append(days)
-        zipped_list = zip(lists, date_difference)
-        return zipped_list
-
-    tasks_daily_user_with_completed_days = zipping(tasks_daily_user)
-
-    context = {
-        "tasks_daily_user": tasks_daily_user,
-        "tasks_daily_user_with_completed_days": tasks_daily_user_with_completed_days
-    }
-    return render(request, 'settings.html', context)
+    return render(request, 'home.html', {})
 
 
 @login_required(login_url='/user_login/')
@@ -282,8 +288,8 @@ def delete_daily_task(request):
         daily_task = DailyTask.objects.get(id=task_id)
 
         daily_task.delete()
-        return redirect(f"/settings/")
-    return render(request, 'settings.html', {})
+        return redirect(f"/tasks_list/")
+    return render(request, 'tasks_list.html', {})
 
 
 def user_login(request):

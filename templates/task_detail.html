@@ -2,23 +2,19 @@
 {% block page %}
 <body id="">
 
-    <h5><b>{{request.user}}'s</b> task</h5>
-<ul class="nav">
-    <li class="nav-item">
-        <form method="POST" action="/change_task_status/">{% csrf_token %}
-            {% if task.done == True %}
-                <button name="change_status" value={{task.id}} type="submit" class="btn btn-success ">Done</button>
-            {%else%}
-                <button name="change_status" value={{task.id}} type="submit" class="btn btn-danger ">In progress</button>
-            {%endif%}
-        </form>
-    </li>
-    <li class="nav-item">
-        <form method="POST" action="/delete_task/">{% csrf_token %}
-            <button name="delete_task" value={{task.id}} class="btn btn-primary ">Delete task </button>
-        </form>
-    </li>
-</ul><br>
+<h5><b>{{request.user}}'s</b> task</h5>
+    <form method="POST" id="change_task_stat" action="/change_task_status/">{% csrf_token %}</form>
+    <form method="POST" id="delete_task" action="/delete_task/">{% csrf_token %}</form>
+<p>
+    {% if task.done == True %}
+        <button name="change_status" form="change_task_stat" value={{task.id}} type="submit" class="btn btn-success ">Done</button>
+    {%else%}
+        <button name="change_status" form="change_task_stat" value={{task.id}} type="submit" class="btn btn-danger ">In progress</button>
+    {%endif%}
+
+    <button name="delete_task" form="delete_task" value={{task.id}} class="btn btn-primary ">Delete task </button>
+</p>
+<br>
 <form method="POST" action="/tasks_list/{{task.id}}/update_task">{% csrf_token %}
 <table class="table">
   <thead class="thead-dark">

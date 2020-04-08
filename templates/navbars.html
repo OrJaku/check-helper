@@ -6,11 +6,7 @@
     <li class="nav-item">
       <a class="nav-link" href="/tasks_list">Your tasks</a>
     </li>
-    {%if request.user.is_authenticated%}
-    <li class="nav-item">
-      <a class="nav-link" href="/settings">Settings</a>
-    </li>
-    {%endif%}
+
     {%if not request.user.is_authenticated%}
       <li class="nav-item">
          <a class="nav-link" href="/user_login">Login</a>
@@ -23,8 +19,10 @@
     <li class="nav-item">
       <a class="nav-link disabled" href="#">About</a>
     </li>
+    {%if request.user.is_authenticated%}
     <li class="nav-item">
-      <a class="nav-link disabled" href="#">{{time_data}}</a>
+      <a class="nav-link disabled" href="/settings">Settings</a>
     </li>
+    {%endif%}
   </ul>
 </nav>
