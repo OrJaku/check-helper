@@ -14,7 +14,6 @@
 
     <button name="delete_task" form="delete_task" value={{task.id}} class="btn btn-primary ">Delete task </button>
 </p>
-<br>
 <form method="POST" action="/tasks_list/{{task.id}}/update_task">{% csrf_token %}
 <table class="table">
   <thead class="thead-dark">

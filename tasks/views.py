@@ -53,9 +53,9 @@ def tasks_list(request):
             days = 0
         if days < 0:
             if task_daily_user.done is True and task_daily_user.brand.id == 2:
-                daily_task_completed = DailyTask.objects.get(name=task_daily_user.name).completed
-                daily_task_completed += 1
-                daily_task_completed .save()
+                daily_task_completed = DailyTask.objects.get(name=task_daily_user.name)
+                daily_task_completed.completed += 1
+                daily_task_completed.save()
             else:
                 pass
             task_daily_user.delete()
