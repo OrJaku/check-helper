@@ -83,7 +83,6 @@
             <th scope="row"></th>
             <td><b>
                 <a href="/tasks_list/{{task.id}}">{{task.name}} </a></b>
-                <font size="3" color="gray">[{{task.id}}]</font>
             </td>
             <td><font color="#3366ff"> {{task.end_data}}</font>
                     {%if diff == 0%}
@@ -130,7 +129,6 @@
 
             <th scope="row"></th>
             <td><b><a href="/tasks_list/{{task.id}}">{{task.name}} </a></b>
-                <font size="3" color="gray">[{{task.id}}]</font>
             </td>
             <td>{{task.info}}</td>
             <td>{{task.category}}</td>
@@ -188,7 +186,6 @@
                 {%endif%}
                     <th scope="row"></th>
                     <td><b><a href="/tasks_list/{{task.id}}">{{task.name}} </a></b>
-                        <font size="3" color="gray">[{{task.id}}]</font>
                     </td>
                     <td>{{task.end_data}}<br>
                     {%if task.brand.id == 2%}

@@ -55,11 +55,13 @@ def tasks_list(request):
         except ValueError:
             days = 0
         if days < 0:
-
             if task_daily_user.done is True and task_daily_user.brand.id == 2:
-                daily_task_completed = DailyTask.objects.get(name=task_daily_user.name)
-                daily_task_completed.completed += 1
-                daily_task_completed.save()
+                try:
+                    daily_task_completed = DailyTask.objects.get(name=task_daily_user.name)
+                    daily_task_completed.completed += 1
+                    daily_task_completed.save()
+                except Task.DoesNotExist:
+                    print(f'{task_daily_user} does not exist')
             else:
                 pass
             task_daily_user.delete()
@@ -254,7 +256,7 @@ def delete_task(request):
         task_id = request.POST["delete_task"]
         task = Task.objects.get(id=task_id)
         task.delete()
-        messages.warning(request, f"Task {task.name} deleted")
+        messages.warning(request, f"Task {task.name} has been deleted")
         return redirect(f"/tasks_list/")
     return render(request, 'tasks_list.html', {})
 
@@ -293,10 +295,11 @@ def daily_tasks_settings(request):
 @login_required(login_url='/user_login/')
 def delete_daily_task(request):
     if request.method == "POST":
+        print("POST", request.POST)
         task_id = request.POST["delete_daily_task"]
         daily_task = DailyTask.objects.get(id=task_id)
         daily_task.delete()
-        messages.warning(request, f"Daily task {daily_task.tag} deleted")
+        messages.warning(request, f"Daily task {daily_task.tag} has been deleted")
         return redirect(f"/tasks_list/")
     return render(request, 'tasks_list.html', {})
 
