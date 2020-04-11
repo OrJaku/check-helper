@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
+from django.contrib import messages
 from .models import Task, Brand, DailyTask
 import datetime
 from datetime import timedelta
@@ -39,6 +40,8 @@ def tasks_list(request):
         return task
 
     sort = "end_data"
+    sort_archive = "-end_data"
+
     current_date = datetime.date.today()
 
     tasks_user = Task.objects.all().filter(user=request.user).filter(brand=1)
@@ -52,6 +55,7 @@ def tasks_list(request):
         except ValueError:
             days = 0
         if days < 0:
+
             if task_daily_user.done is True and task_daily_user.brand.id == 2:
                 daily_task_completed = DailyTask.objects.get(name=task_daily_user.name)
                 daily_task_completed.completed += 1
@@ -102,6 +106,8 @@ def tasks_list(request):
                 user=request.user,
             )
             daily_task.save()
+            messages.success(request, f"New daily task '{tag}' has been added ")
+
             return redirect("/tasks_list/")
 
         elif "sort" in request.POST:
@@ -150,6 +156,7 @@ def tasks_list(request):
             else:
                 pass
             new_task(name, category, info, description, priority, request.user, start_data, end_data).save()
+            messages.success(request, f"New task '{name}' has been added ")
             return redirect('/tasks_list/')
 
         else:
@@ -188,7 +195,7 @@ def tasks_list(request):
         return zipped_list
 
     tasks_user_with_date_difference = zipping(tasks_user.order_by(sort))
-    tasks_user_archive_with_date_difference = zipping(tasks_user_archive.order_by(sort))
+    tasks_user_archive_with_date_difference = zipping(tasks_user_archive.order_by(sort_archive))
     tasks_daily_user_with_date_difference = zipping(tasks_daily_user.order_by(sort))
 
     context = {
@@ -247,6 +254,7 @@ def delete_task(request):
         task_id = request.POST["delete_task"]
         task = Task.objects.get(id=task_id)
         task.delete()
+        messages.warning(request, f"Task {task.name} deleted")
         return redirect(f"/tasks_list/")
     return render(request, 'tasks_list.html', {})
 
@@ -273,11 +281,12 @@ def update_task(request, task_id):
         else:
             task.end_data = end_data
         task.save()
+        messages.info(request, f"Task {task.name} updated")
         return redirect(f'/tasks_list/{task_id}')
     return render(request, 'tasks_list.html', {})
 
 
-def settings(request):
+def daily_tasks_settings(request):
     return render(request, 'home.html', {})
 
 
@@ -286,8 +295,8 @@ def delete_daily_task(request):
     if request.method == "POST":
         task_id = request.POST["delete_daily_task"]
         daily_task = DailyTask.objects.get(id=task_id)
-
         daily_task.delete()
+        messages.warning(request, f"Daily task {daily_task.tag} deleted")
         return redirect(f"/tasks_list/")
     return render(request, 'tasks_list.html', {})
 
@@ -299,9 +308,10 @@ def user_login(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
+            messages.success(request, f'Login success as user: {username}')
             return redirect('/tasks_list/')
         else:
-            print("invalid login or password")
+            messages.error(request, 'Invalid login or password')
         return render(request, 'home.html', {})
     else:
         return render(request, 'user_login.html', {})
@@ -309,4 +319,5 @@ def user_login(request):
 
 def user_logout(request):
     logout(request)
+    messages.info(request, 'You are logged out')
     return redirect('/')

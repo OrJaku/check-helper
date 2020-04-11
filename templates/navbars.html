@@ -13,16 +13,24 @@
       </li>
     {%else%}
     <li class="nav-item">
-      <a class="nav-link" href="/user_logout">Logout <i><font color="#7DA6E4">`{{request.user}}`</font></i></a>
+      <a class="nav-link" href="/user_logout">Logout <font color="#7DA6E4">{{request.user}}</font></a>
     </li>
     {%endif%}
     <li class="nav-item">
       <a class="nav-link disabled" href="#">About</a>
     </li>
-    {%if request.user.is_authenticated%}
     <li class="nav-item">
-      <a class="nav-link disabled" href="/settings">Settings</a>
+          <div class="container">
+        {% for message in messages %}
+          <div class="alert {{ message.tags }} alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            {{ message }}
+          </div>
+        {% endfor %}
+      </div>
     </li>
-    {%endif%}
+
   </ul>
 </nav>

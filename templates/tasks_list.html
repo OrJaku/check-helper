@@ -18,7 +18,7 @@
     </div>
     <div class="collapse" id="collapseDailyTasks">
         <div class="card card-body">
-              {% include 'settings.html' %}
+              {% include 'daily_tasks_settings.html' %}
         </div>
     </div>
 
@@ -110,9 +110,14 @@
                     </form>
                 </center>
             </td>
-                </tr>
+</tr>
         {%endif%}
   {%endfor%}
+
+<tr>
+    <th scope="row"></th>
+</tr>
+
 <!--#### Standard Tasks ####-->
 
   {%for task, diff in tasks%}
