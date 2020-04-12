@@ -60,7 +60,7 @@ def tasks_list(request):
                     daily_task_completed = DailyTask.objects.get(name=task_daily_user.name)
                     daily_task_completed.completed += 1
                     daily_task_completed.save()
-                except Task.DoesNotExist:
+                except DailyTask.DoesNotExist:
                     print(f'{task_daily_user} does not exist')
             else:
                 pass
@@ -80,8 +80,12 @@ def tasks_list(request):
     for task_daily_settings in tasks_daily_settings:
         if daily_task_info not in daily_task_list_info or task_daily_settings.name not in daily_task_list_name:
             daily_task = DailyTask.objects.get(id=task_daily_settings.id)
+            if daily_task.name == "":
+                name = "Empty"
+            else:
+                name = daily_task.name
             new_task(
-                daily_task.name,
+                name,
                 daily_task.category,
                 daily_task_info,
                 daily_task.description,
@@ -98,6 +102,9 @@ def tasks_list(request):
         if "daily" in request.POST:
             tag = request.POST.get("tag")
             name = request.POST.get("name")
+            if tag == "" or name == "":
+                messages.warning(request, f"You have to add tag and name of daily task")
+                return redirect("/tasks_list/")
             category = request.POST.get("category")
             description = request.POST.get("description")
             daily_task = DailyTask.objects.create(
@@ -128,10 +135,6 @@ def tasks_list(request):
             category = category.title()
 
             info = request.POST.get("info")
-            if name == "":
-                name = 'Empty'
-            else:
-                pass
 
             description = request.POST.get("description")
 
@@ -157,6 +160,14 @@ def tasks_list(request):
                 end_data = current_date + timedelta(delta)
             else:
                 pass
+            if name == "" and category == "" and info == "" and description == "":
+                messages.warning(request, f"You did not fill task data")
+                return redirect("/tasks_list/")
+            elif name == "":
+                name = f"New task {datetime.datetime.now().strftime('%H:%M:%S')}"
+            else:
+                pass
+
             new_task(name, category, info, description, priority, request.user, start_data, end_data).save()
             messages.success(request, f"New task '{name}' has been added ")
             return redirect('/tasks_list/')
@@ -295,7 +306,6 @@ def daily_tasks_settings(request):
 @login_required(login_url='/user_login/')
 def delete_daily_task(request):
     if request.method == "POST":
-        print("POST", request.POST)
         task_id = request.POST["delete_daily_task"]
         daily_task = DailyTask.objects.get(id=task_id)
         daily_task.delete()

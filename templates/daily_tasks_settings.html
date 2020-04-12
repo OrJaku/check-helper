@@ -33,39 +33,37 @@
   </thead>
   <tbody>
         {% for task_daily, difference in tasks_daily_user_with_completed_days %}
-    <tr>
-        <td>{{task_daily.tag}}</td>
-        <td>{{task_daily.name}}</td>
-        <td>{{task_daily.category}}</td>
-        <td>{{task_daily.description}}</td>
-        <td>{{task_daily.completed}}/{{difference}}</td>
-        <td>{{task_daily.first_date}}</td>
-        <td>{{task_daily.active}}</td>
-        <td>
-<!--         <button type="submit" class="btn btn-primary"  name="delete_daily_task" form="delete_daily_task" value={{task_daily.id}}>Yes, delete daily task</button>-->
+            <tr>
+                <td>{{task_daily.tag}}</td>
+                <td>{{task_daily.name}}</td>
+                <td>{{task_daily.category}}</td>
+                <td>{{task_daily.description}}</td>
+                <td>{{task_daily.completed}}/{{difference}}</td>
+                <td>{{task_daily.first_date}}</td>
+                <td>{{task_daily.active}}</td>
+                <td>
             <center>
 
                 <form method="POST" id="delete_daily_task" action="/delete_daily_task/">{% csrf_token %}
-                    <input type="hidden" value={{task_daily.id}} name="delete_daily_task">
                 </form>
-                    <button type="button" class="btn btn-danger btn-sm"  data-toggle="modal" data-target="#staticBackdrop">
-                    Delete daily task {{task_daily.tag}} </button>
+                     <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" value="{{task_daily.id}}" data-target="#DailyDelete_{{task_daily.id}}">
+                    Delete daily task</button>
 
-                    <div class="modal fade" id="staticBackdrop" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                    <div class="modal fade" id="DailyDelete_{{task_daily.id}}" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                       <div class="modal-dialog" role="document">
                         <div class="modal-content">
                           <div class="modal-header">
-                            <h5 class="modal-title" id="staticBackdropLabel">Delete daily task</h5>
+                            <h5 class="modal-title" id="staticBackdropLabel">{{task_daily.tag}} - {{task_daily.name}}</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                               <span aria-hidden="true">&times;</span>
                             </button>
                           </div>
-                          <div class="modal-body">
-                            Are you sure you want to delete this daily task?
+                          <div class="modal-body" >
+                            Are you sure you want to delete daily task {{task_daily.tag}}?
                           </div>
                           <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
-                            <button type="submit" class="btn btn-primary"  form="delete_daily_task">Yes, delete daily task</button>
+                            <button type="submit" class="btn btn-primary" value={{task_daily.id}} name="delete_daily_task" form="delete_daily_task" >Yes, delete daily task</button>
                           </div>
                         </div>
                       </div>
