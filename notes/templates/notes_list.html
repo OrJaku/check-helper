@@ -1,21 +1,26 @@
 {% extends "base.html" %}
 {% block page %}
 <body>
-    <form method="POST" action=".">{% csrf_token %}
-    <b>Title:</b>
-        <textarea  class="form-control" rows="1" cols="1"  name='name' >{{note.name}}</textarea>
-    <b>Note:</b>
-        <textarea  class="form-control" rows="3" cols="1"  name='description' >{{note.description}}</textarea><br>
-
-    <center><button type="submit" name="now_note" class="btn btn-primary btn-lg btn-block">New note +</button><br></center>
-    </form>
-
-    {%for note in notes%}
-    <b>Title:</b>
-        <textarea  class="form-control" rows="1" cols="1"  name='name' >{{note.name}}</textarea>
-    <b>Note:</b>
-        <textarea  class="form-control" rows="3" cols="1"  name='description' >{{note.description}}</textarea>
+    {% include 'add_note.html' %}
+    <p>
+    {%for day in days%}
+          <button class="btn btn-primary"   type="button" data-toggle="collapse" data-target="#collapse_{{day}}" aria-expanded="false" aria-controls="collapse_{{day}}">
+              {{day}}
+      </button>
+    </p>
+    <div class="collapse" id="collapse_{{day}}">
+        <div class="card card-body">
+            {%for note in notes%}
+                <b>Title:</b>
+                    <textarea  class="form-control" rows="1" cols="1"  name='name' >{{note.name}}</textarea>
+                <b>Note:</b>
+                    <textarea  class="form-control" rows="3" cols="1"  name='description' >{{note.description}}</textarea>
+            {%endfor%}
+        </div>
+    </div>
     {%endfor%}
+
+
 </body>
 {% endblock %}
 
