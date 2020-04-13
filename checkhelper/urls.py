@@ -12,6 +12,8 @@ from tasks.views import home, \
     daily_tasks_settings, \
     delete_daily_task
 
+from notes.views import notes_list
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -21,14 +23,15 @@ urlpatterns = [
     path('tasks_list/', tasks_list, name='tasks_list'),
     path('tasks_list/<int:task_id>', task_detail, name='task_detail'),
     path('tasks_list/<int:task_id>/update_task', update_task, name='update_task'),
+    path('change_task_status/', change_task_status, name='change_task_status'),
+    path('delete_task/', delete_task, name='delete_task'),
+    path('daily_tasks_settings/', daily_tasks_settings, name='daily_tasks_settings'),
+    path('delete_daily_task/', delete_daily_task, name='delete_daily_task'),
 
     path('user_login/', user_login, name='user_login'),
     path('user_logout/', user_logout, name='user_logout'),
-    path('change_task_status/', change_task_status, name='change_task_status'),
-    path('delete_task/', delete_task, name='delete_task'),
 
-    path('daily_tasks_settings/', daily_tasks_settings, name='daily_tasks_settings'),
-    path('delete_daily_task/', delete_daily_task, name='delete_daily_task')
+    path('notes_list/', notes_list, name="notes_list"),
 ]
 
 

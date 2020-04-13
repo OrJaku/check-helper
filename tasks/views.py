@@ -9,6 +9,7 @@ from datetime import timedelta
 
 def home(request, *args, **kwargs):
     print(request.user)
+
     return render(request, 'home.html', {})
 
 
@@ -175,7 +176,7 @@ def tasks_list(request):
         else:
             return render(request, 'tasks_list.html', {})
 
-    tasks_daily_user_1 = DailyTask.objects.all().filter(user=request.user)
+    daily_tasks_user = DailyTask.objects.all().filter(user=request.user)
 
     def zipping_daily(lists):
         date_difference1 = []
@@ -191,7 +192,7 @@ def tasks_list(request):
         zipped_list_d = zip(lists, date_difference1)
         return zipped_list_d
 
-    tasks_daily_user_with_completed_days = zipping_daily(tasks_daily_user_1)
+    daily_tasks_user_with_completed_days = zipping_daily(daily_tasks_user)
 
     def zipping(lists):
         date_difference = []
@@ -215,7 +216,7 @@ def tasks_list(request):
         'tasks': tasks_user_with_date_difference,
         'tasks_archive': tasks_user_archive_with_date_difference,
         'tasks_daily': tasks_daily_user_with_date_difference,
-        "tasks_daily_user_with_completed_days": tasks_daily_user_with_completed_days,
+        "daily_tasks_user_with_completed_days": daily_tasks_user_with_completed_days,
 
     }
     return render(request, 'tasks_list.html', context)
@@ -334,3 +335,4 @@ def user_logout(request):
     logout(request)
     messages.info(request, 'You are logged out')
     return redirect('/')
+

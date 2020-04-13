@@ -11,7 +11,6 @@
           <div class="col">
               <input type="text" class="form-control" name="category" placeholder="Category">
           </div>
-
           <div class="col">
               <input type="text" class="form-control" name="description" placeholder="Comment">
           </div>
@@ -32,7 +31,7 @@
     </tr>
   </thead>
   <tbody>
-        {% for task_daily, difference in tasks_daily_user_with_completed_days %}
+        {% for task_daily, difference in daily_tasks_user_with_completed_days %}
             <tr>
                 <td>{{task_daily.tag}}</td>
                 <td>{{task_daily.name}}</td>
