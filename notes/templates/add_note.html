@@ -1,16 +1,28 @@
-    <p>
-      <button class="btn btn-primary"   type="button" data-toggle="collapse" data-target="#collapseNewNote" aria-expanded="false" aria-controls="collapseNewNote">
+ <nav class="navbar navbar-light bg-light justify-content-between">
+  <a class="navbar-brand">
+      <button class="btn btn-secondary"   type="button" data-toggle="collapse" data-target="#collapseNewNote" aria-expanded="false" aria-controls="collapseNewNote">
           New note +
-      </button>
-    </p>
-    <div class="collapse" id="collapseNewNote">
+      </button></a>
+  <form class="form-inline">
+    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+    <button class="btn btn-outline-secondary my- my-sm-0" type="submit">Search</button>
+  </form>
+</nav>
+
+
+
+
+
+
+    <br>
+      <div class="collapse" id="collapseNewNote">
         <div class="card card-body">
             <form method="POST" action=".">{% csrf_token %}
                 <b>Title:</b>
                     <input type="text"  class="form-control" name='name' >
                 <b>Note:</b>
                     <textarea  class="form-control" rows="3" cols="1"  name='description' ></textarea><br>
-                <center><button type="submit" name="now_note" class="btn btn-primary btn-lg btn-block">New note +</button><br></center>
+                <center><button type="submit" name="now_note" class="btn btn-secondary btn-lg btn-block">New note +</button><br></center>
             </form>
         </div>
     </div>

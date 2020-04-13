@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block page %}
-
+    <h5><b>{{request.user}}'s</b> notes</h5>
     {% include 'add_note.html' %}
 
     {%for day_str, day_date in date%}
@@ -9,7 +9,6 @@
               {{ day_date }}
     </button>
     </p>
-
     <div class="collapse" id="coll{{day_str}}">
         <div class="card card-body">
 

@@ -3,14 +3,15 @@
 
 <body>
     <h5><b>{{request.user}}'s</b> tasks</h5>
-    <p>
+    <nav class="navbar navbar-light bg-light justify-content-between">
+            <a class="navbar-brand">
       <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseNewTask" aria-expanded="false" aria-controls="collapseNewTask">
           New task +
       </button>
-      <button class="btn btn-primary"   type="button" data-toggle="collapse" data-target="#collapseDailyTasks" aria-expanded="false" aria-controls="collapseDailyTasks">
+      <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseDailyTasks" aria-expanded="false" aria-controls="collapseDailyTasks">
           Daily tasks
-      </button>
-    </p>
+      </button></a>
+    </nav>
     <div class="collapse" id="collapseNewTask">
         <div class="card card-body">
               {% include 'add_task.html' %}
@@ -23,48 +24,48 @@
     </div>
 
  <table class="table">
-  <thead class="thead-dark">
+  <thead class="table-active">
     <tr>
         <th scope="col">
         </th>
         <th scope="col">
             <form method="POST"  action=".">{% csrf_token %}
-                 <button name="sort" type="submit"  value="name" class="btn btn-secondary btn-sm">Task</button>
+                 <button name="sort" type="submit"  value="name" class="btn btn-active btn-sm">Task</button>
             </form>
         </th>
         <th scope="col">
             <form method="POST"  action=".">{% csrf_token %}
-                 <button name="sort" type="submit"  value="info" class="btn btn-secondary btn-sm">Info</button>
+                 <button name="sort" type="submit"  value="info" class="btn btn-active btn-sm">Info</button>
             </form>
         </th>
         <th scope="col">
             <form method="POST" action=".">{% csrf_token %}
-                 <button name="sort" type="submit"  value="category" class="btn btn-secondary btn-sm">Category</button>
+                 <button name="sort" type="submit"  value="category" class="btn btn-active btn-sm">Category</button>
             </form>
         </th>
         <th scope="col">
             <form method="POST" action=".">{% csrf_token %}
-                 <button name="sort" type="submit"  value="description" class="btn btn-secondary btn-sm">Comment</button>
+                 <button name="sort" type="submit"  value="description" class="btn btn-active btn-sm">Comment</button>
             </form>
         </th>
         <th scope="col">
             <form method="POST" action=".">{% csrf_token %}
-                 <button name="sort" type="submit"  value="-priority" class="btn btn-secondary btn-sm">Prio</button>
+                 <button name="sort" type="submit"  value="-priority" class="btn btn-active btn-sm">Prio</button>
             </form>
         </th>
         <th scope="col">
             <form method="POST" action=".">{% csrf_token %}
-                 <button name="sort" type="submit"  value="start_data" class="btn btn-secondary btn-sm">First day</button>
+                 <button name="sort" type="submit"  value="start_data" class="btn btn-active btn-sm">First day</button>
             </form>
         </th>
         <th scope="col">
             <form method="POST" action=".">{% csrf_token %}
-                 <button name="sort" type="submit"  value="end_data" class="btn btn-secondary btn-sm">Last day</button>
+                 <button name="sort" type="submit"  value="end_data" class="btn btn-active btn-sm">Last day</button>
             </form>
         </th>
         <th scope="col">
             <form method="POST" action=".">{% csrf_token %}
-                 <button name="sort" type="submit"  value="done" class="btn btn-secondary btn-sm">Status</button>
+                 <button name="sort" type="submit"  value="done" class="btn btn-active btn-sm">Status</button>
             </form>
         </th>
     </tr>

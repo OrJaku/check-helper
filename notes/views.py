@@ -31,7 +31,6 @@ def notes_list(request, *args, **kwargs):
     date = zip(days_str, days_date)
     from django.utils import timezone
     now = timezone.now()
-    print("TIME", now)
 
     notes = Notes.objects.all().filter(user=request.user)
 
