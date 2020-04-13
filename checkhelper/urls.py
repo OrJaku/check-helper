@@ -12,7 +12,8 @@ from tasks.views import home, \
     daily_tasks_settings, \
     delete_daily_task
 
-from notes.views import notes_list
+from notes.views import notes_list, \
+    delete_note
 
 
 urlpatterns = [
@@ -32,6 +33,7 @@ urlpatterns = [
     path('user_logout/', user_logout, name='user_logout'),
 
     path('notes_list/', notes_list, name="notes_list"),
+    path('delete_note/', delete_note, name="delete_note"),
 ]
 
 

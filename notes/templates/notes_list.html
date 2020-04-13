@@ -1,25 +1,42 @@
 {% extends "base.html" %}
 {% block page %}
-<body>
+
     {% include 'add_note.html' %}
+
+    {%for day_str, day_date in date%}
     <p>
-    {%for day in days%}
-          <button class="btn btn-primary"   type="button" data-toggle="collapse" data-target="#collapse_{{day}}" aria-expanded="false" aria-controls="collapse_{{day}}">
-              {{day}}
-      </button>
+    <button class="btn btn-secondary btn-lg btn-block" type="button" data-toggle="collapse" data-target="#coll{{day_str}}" aria-expanded="false" aria-controls="coll{{day_str}}">
+              {{ day_date }}
+    </button>
     </p>
-    <div class="collapse" id="collapse_{{day}}">
+
+    <div class="collapse" id="coll{{day_str}}">
         <div class="card card-body">
-            {%for note in notes%}
-                <b>Title:</b>
-                    <textarea  class="form-control" rows="1" cols="1"  name='name' >{{note.name}}</textarea>
-                <b>Note:</b>
-                    <textarea  class="form-control" rows="3" cols="1"  name='description' >{{note.description}}</textarea>
-            {%endfor%}
+
+            <div class="row">
+
+            {% for note in notes %}
+                {% if note.date == day_date %}
+
+                      <div class="col-sm-6">
+                        <div class="card">
+                          <div class="card-body">
+                            <h5 class="card-title">{{ note.name }} <font color="gray" size="2px"><i>{{note.time}}</i></font></h5>
+                            <p class="card-text">{{ note.description }}</p>
+                              <form method="POST" id="delete_note" action="/delete_note/">{% csrf_token %}</form>
+                                  <p>
+                                      <button type="submit" form="delete_note" name='delete_note' value={{note.id}} class="btn btn btn-outline-danger btn-sm">Delete</button>
+                                  </p>
+                          </div>
+                        </div>
+                      </div>
+                {% endif %}
+            {% endfor %}
+            </div>
         </div>
     </div>
-    {%endfor%}
 
+    {% endfor %}
 
 </body>
 {% endblock %}
