@@ -1,0 +1,38 @@
+{% if found_elements is None or not found_elements %}
+
+{% else %}
+<p>
+<button class="btn btn-outline-primary btn-lg btn-block" type="button" data-toggle="collapse" data-target="#titles" aria-expanded="false" aria-controls="titles">
+          Found in Tasks
+</button>
+</p>
+<div class="collapse" id="titles">
+    <div class="card card-body">
+        <div class="row">
+        {% for name, task  in found_elements.items %}
+              <div class="col-sm-6">
+                <div class="card">
+                  <div class="card-body">
+                    <h5 class="card-title">
+                        <a href="/tasks_list/{{task.0}}">{{name}}
+                            {% if task.7 == True %}
+                                <font color="green" size="3px"><b>[Done]</b></font>
+                            {% else %}
+                                <font color="red" size="3px"><b>[In progress]</b></font>
+                            {% endif %}
+                            </a> <br>
+                        <font color="gray" size="2px"><i> {{ task.5 }} - {{ task.4 }} [{{task.6}}]</i></font></h5>
+                    <p class="card-text">
+                        <i>{{ task.2 }} // {{ task.1 }}</i></p>
+                    <p class="card-text">
+
+                    <p class="card-text">
+                        Comment: {{ task.2 }}</p>
+                  </div>
+                </div>
+              </div>
+        {% endfor %}
+        </div>
+    </div>
+</div>
+{% endif %}

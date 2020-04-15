@@ -10,11 +10,12 @@ from tasks.views import home, \
     update_task, \
     delete_task, \
     daily_tasks_settings, \
-    delete_daily_task
+    delete_daily_task, \
+    searching_tasks
 
 from notes.views import notes_list, \
     delete_note, \
-    searching
+    searching_notes
 
 
 urlpatterns = [
@@ -29,13 +30,14 @@ urlpatterns = [
     path('delete_task/', delete_task, name='delete_task'),
     path('daily_tasks_settings/', daily_tasks_settings, name='daily_tasks_settings'),
     path('delete_daily_task/', delete_daily_task, name='delete_daily_task'),
+    path('searching_tasks/', searching_tasks, name='searching_tasks'),
 
     path('user_login/', user_login, name='user_login'),
     path('user_logout/', user_logout, name='user_logout'),
 
-    path('notes_list/', notes_list, name="notes_list"),
-    path('delete_note/', delete_note, name="delete_note"),
-    path('searching/', searching, name="searching"),
+    path('notes_list/', notes_list, name='notes_list'),
+    path('delete_note/', delete_note, name='delete_note'),
+    path('searching_notes/', searching_notes, name='searching_notes'),
 ]
 
 

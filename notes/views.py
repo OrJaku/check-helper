@@ -10,6 +10,9 @@ from .models import Notes
 def notes_list(request, *args, **kwargs):
     if request.method == "POST":
         name = request.POST.get("name")
+        if name == "":
+            messages.warning(request, "You need to add title to note")
+            return redirect("/notes_list/")
         description = request.POST.get("description")
         time = datetime.datetime.now() + timedelta(hours=2)
         time = time.strftime('%H:%M')
@@ -62,7 +65,7 @@ def delete_note(request):
 
 
 @login_required(login_url='/user_login/')
-def searching(request):
+def searching_notes(request):
     if request.method == "POST":
         def search_function(search_sentences):
             notes_name = Notes.objects.filter(name__contains=search_sentences).filter(user=request.user)
@@ -82,6 +85,8 @@ def searching(request):
             pass
 
         found_elements = search_function(search)
+        if not found_elements[0] and not found_elements[1]:
+            messages.warning(request, "No result found..")
         request.session["found_by_name"] = found_elements[0]
         request.session["found_by_description"] = found_elements[1]
 

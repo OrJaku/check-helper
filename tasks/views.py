@@ -212,11 +212,18 @@ def tasks_list(request):
     tasks_user_archive_with_date_difference = zipping(tasks_user_archive.order_by(sort_archive))
     tasks_daily_user_with_date_difference = zipping(tasks_daily_user.order_by(sort))
 
+    found_elements = request.session.get('found_elements')
+    print("----Found_elements_in_list", found_elements)
+    try:
+        del request.session['found_elements']
+    except KeyError:
+        found_elements = None
     context = {
         'tasks': tasks_user_with_date_difference,
         'tasks_archive': tasks_user_archive_with_date_difference,
         'tasks_daily': tasks_daily_user_with_date_difference,
-        "daily_tasks_user_with_completed_days": daily_tasks_user_with_completed_days,
+        'daily_tasks_user_with_completed_days': daily_tasks_user_with_completed_days,
+        'found_elements': found_elements,
 
     }
     return render(request, 'tasks_list.html', context)
@@ -315,6 +322,41 @@ def delete_daily_task(request):
     return render(request, 'tasks_list.html', {})
 
 
+@login_required(login_url='/user_login/')
+def searching_tasks(request):
+    if request.method == "POST":
+        def search_function(search_sentences):
+            tasks = Task.objects.filter(name__contains=search_sentences).filter(user=request.user).order_by("name")
+            found_tasks = {}
+            for task in tasks:
+                found_tasks[task.name] = [task.id,
+                                          task.info,
+                                          task.category,
+                                          task.description,
+                                          str(task.end_data),
+                                          str(task.start_data),
+                                          str(task.brand),
+                                          task.done,
+                                          ]
+            return found_tasks
+        search = request.POST["search"]
+        print("++SEARCH", search)
+        if search == "":
+            messages.info(request, "Fill searching window..")
+            return redirect("/tasks_list/")
+        else:
+            pass
+
+        found_elements = search_function(search)
+        print("+++Found_elements", found_elements)
+
+        if not found_elements:
+            messages.warning(request, "No result found..")
+        request.session["found_elements"] = found_elements
+        return redirect("/tasks_list/")
+    return render(request, 'tasks_list.html', {{}})
+
+
 def user_login(request):
     if request.method == "POST":
         username = request.POST['username']
@@ -335,4 +377,3 @@ def user_logout(request):
     logout(request)
     messages.info(request, 'You are logged out')
     return redirect('/')
-

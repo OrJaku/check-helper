@@ -3,7 +3,7 @@
       <button class="btn btn-secondary"   type="button" data-toggle="collapse" data-target="#collapseNewNote" aria-expanded="false" aria-controls="collapseNewNote">
           New note +
       </button></a>
-  <form class="form-inline" method="POST" action="/searching/">{% csrf_token %}
+  <form class="form-inline" method="POST" action="/searching_notes/">{% csrf_token %}
     <input class="form-control mr-sm-2" type="search" name="search" placeholder="Search" aria-label="Search">
     <button class="btn btn-outline-secondary my- my-sm-0"  type="submit">Search</button>
   </form>

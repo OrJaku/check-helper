@@ -3,11 +3,7 @@
 <body>
     <h5><b>{{request.user}}'s</b> notes</h5>
     {% include 'add_note.html' %}
-    {% include 'found_elements.html' %}
-
-
-
-
+    {% include 'found_notes_elements.html' %}
 
     {%for day_str, day_date in date%}
     <p>

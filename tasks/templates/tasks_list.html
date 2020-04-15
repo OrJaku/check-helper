@@ -11,6 +11,10 @@
       <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseDailyTasks" aria-expanded="false" aria-controls="collapseDailyTasks">
           Daily tasks
       </button></a>
+        <form class="form-inline" method="POST" action="/searching_tasks/">{% csrf_token %}
+            <input class="form-control mr-sm-2" type="search" name="search" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-primary my- my-sm-0"  type="submit">Search</button>
+  </form>
     </nav>
     <div class="collapse" id="collapseNewTask">
         <div class="card card-body">
@@ -22,7 +26,7 @@
               {% include 'daily_tasks_settings.html' %}
         </div>
     </div>
-
+    {% include 'found_tasks_elements.html' %}
  <table class="table">
   <thead class="table-active">
     <tr>
