@@ -11,9 +11,9 @@
         <div class="row">
         {% for name, task  in found_elements.items %}
               <div class="col-sm-6">
-                <div class="card">
+                <div class="card ">
                   <div class="card-body">
-                    <h5 class="card-title">
+                    <h5 class="card-titl">
                         <a href="/tasks_list/{{task.0}}">{{name}}
                             {% if task.7 == True %}
                                 <font color="green" size="3px"><b>[Done]</b></font>
@@ -27,7 +27,7 @@
                     <p class="card-text">
 
                     <p class="card-text">
-                        Comment: {{ task.2 }}</p>
+                        Comment: {{ task.3 }}</p>
                   </div>
                 </div>
               </div>

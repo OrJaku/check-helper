@@ -213,7 +213,6 @@ def tasks_list(request):
     tasks_daily_user_with_date_difference = zipping(tasks_daily_user.order_by(sort))
 
     found_elements = request.session.get('found_elements')
-    print("----Found_elements_in_list", found_elements)
     try:
         del request.session['found_elements']
     except KeyError:
@@ -326,21 +325,37 @@ def delete_daily_task(request):
 def searching_tasks(request):
     if request.method == "POST":
         def search_function(search_sentences):
-            tasks = Task.objects.filter(name__contains=search_sentences).filter(user=request.user).order_by("name")
             found_tasks = {}
-            for task in tasks:
-                found_tasks[task.name] = [task.id,
-                                          task.info,
-                                          task.category,
-                                          task.description,
-                                          str(task.end_data),
-                                          str(task.start_data),
-                                          str(task.brand),
-                                          task.done,
-                                          ]
+
+            def task_finder(tasks):
+                for task in tasks:
+                    found_tasks[task.name] = [task.id,
+                                              task.info,
+                                              task.category,
+                                              task.description,
+                                              str(task.end_data),
+                                              str(task.start_data),
+                                              str(task.brand),
+                                              task.done,
+                                              ]
+                return found_tasks
+            tasks_name = Task.objects.filter(name__contains=search_sentences).filter(user=request.user)
+            tasks_description = Task.objects.filter(description__contains=search_sentences)\
+                .filter(user=request.user)\
+                .order_by("name")
+            tasks_info = Task.objects.filter(info__contains=search_sentences)\
+                .filter(user=request.user)\
+                .order_by("name")
+            tasks_category = Task.objects.filter(category__contains=search_sentences)\
+                .filter(user=request.user)\
+                .order_by("name")
+            found_tasks = task_finder(tasks_name)
+            found_tasks = task_finder(tasks_description)
+            found_tasks = task_finder(tasks_info)
+            found_tasks = task_finder(tasks_category)
             return found_tasks
+
         search = request.POST["search"]
-        print("++SEARCH", search)
         if search == "":
             messages.info(request, "Fill searching window..")
             return redirect("/tasks_list/")
@@ -348,8 +363,6 @@ def searching_tasks(request):
             pass
 
         found_elements = search_function(search)
-        print("+++Found_elements", found_elements)
-
         if not found_elements:
             messages.warning(request, "No result found..")
         request.session["found_elements"] = found_elements
