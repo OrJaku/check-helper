@@ -2,11 +2,16 @@
 {% block page %}
  <body id="home">
     <br>
-    <h3> This is your To-Do list application</h3><br>
+    <h3> This is your everyday-life application</h3><br>
     {%if not request.user.is_authenticated%}
-        <h4> You have to <a  href="/user_login">Login</a> to get access to your Tasks list </h4>
+        <h4> You have to <a  href="/user_login">Login</a> to get access to your data</h4>
     {%else%}
-        <h4> Go to  <a  href="/tasks_list">Your tasks</a> or <a  href="/notes_list">notes</a></h4>
+        <h4> Go to your <a  href="/tasks_list"> tasks</a> or <a  href="/notes_list">notes</a></h4>
+            <div class="row">
+                {% include 'cart_tasks_daily.html' %}
+                {% include 'cart_tasks.html' %}
+
+            </div>
     {%endif%}
 
  </body>

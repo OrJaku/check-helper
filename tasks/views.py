@@ -16,8 +16,24 @@ def date_function():
 
 
 def home(request, *args, **kwargs):
-    print(request.user)
-
+    if request.user.is_authenticated:
+        tasks = Task.objects.all().filter(user=request.user).filter(done=False)
+        current_date = date_function().date()
+        tasks_days_lower_then_three = []
+        tasks_today = []
+        for task in tasks:
+            date_difference = task.end_data - current_date
+            if 0 < date_difference.days <= 3:
+                tasks_days_lower_then_three.append(task)
+            elif date_difference.days == 0:
+                tasks_today.append(task)
+            else:
+                pass
+        context = {
+            'tasks_days_lower_then_three': tasks_days_lower_then_three,
+            'tasks_today': tasks_today,
+        }
+        return render(request, 'home.html', context)
     return render(request, 'home.html', {})
 
 
@@ -52,7 +68,6 @@ def tasks_list(request):
     sort_archive = "-end_data"
 
     current_date = date_function().date()
-
     tasks_user = Task.objects.all().filter(user=request.user).filter(brand=1)
     tasks_daily_user = Task.objects.all().filter(user=request.user).filter(brand=2)
 
@@ -78,12 +93,9 @@ def tasks_list(request):
             pass
 
     tasks_user_archive = Task.objects.all().filter(user=request.user)
-
     daily_task_list_info = [name[0] for name in tasks_daily_user.values_list('info')]
     daily_task_list_name = [name[0] for name in tasks_daily_user.values_list('name')]
-
     daily_task_info = str(current_date)
-
     tasks_daily_settings = DailyTask.objects.all().filter(user=request.user)
 
     for task_daily_settings in tasks_daily_settings:
@@ -137,18 +149,12 @@ def tasks_list(request):
                 sort = "" + sort
 
         elif "add" in request.POST:
-
             name = request.POST.get("name")
-
             category = request.POST.get("category")
             category = category.title()
-
             info = request.POST.get("info")
-
             description = request.POST.get("description")
-
             priority = request.POST.get("priority")
-
             start_data = request.POST.get("start_data")
             if start_data == "":
                 start_data = current_date
@@ -187,17 +193,17 @@ def tasks_list(request):
     daily_tasks_user = DailyTask.objects.all().filter(user=request.user)
 
     def zipping_daily(lists):
-        date_difference1 = []
+        date_difference_daily = []
 
         for task in lists:
-            difference1 = date_function().date() - task.first_date
-            days1 = str(difference1).split(" ")
+            difference_daily = date_function().date() - task.first_date
+            days1 = str(difference_daily).split(" ")
             try:
                 days1 = int(days1[0]) + 1
             except ValueError:
                 days1 = 1
-            date_difference1.append(days1)
-        zipped_list_d = zip(lists, date_difference1)
+            date_difference_daily.append(days1)
+        zipped_list_d = zip(lists, date_difference_daily)
         return zipped_list_d
 
     daily_tasks_user_with_completed_days = zipping_daily(daily_tasks_user)
@@ -231,7 +237,6 @@ def tasks_list(request):
         'tasks_daily': tasks_daily_user_with_date_difference,
         'daily_tasks_user_with_completed_days': daily_tasks_user_with_completed_days,
         'found_elements': found_elements,
-
     }
     return render(request, 'tasks_list.html', context)
 

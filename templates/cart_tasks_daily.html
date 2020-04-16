@@ -1,0 +1,24 @@
+<div class="card">
+      <div class="card-header bg-primary text-white">Today</div>
+      <p class="card-text"></p>
+
+{% if not tasks_today  %}
+  <div align="center">
+    <i>No tasks in this group</i>
+  </div>
+{% else %}
+
+  {% for task in tasks_today %}
+    <div class="card text-primary bg-border-primary mb-3" style="max-width: 18rem;">
+      <div class="card-header">{{task.brand.name}} task </div>
+      <div class="card-body">
+        <h5 class="card-title">{{task.name}}</h5>
+        <p class="card-text">{{ task.info }}</p>
+        <p class="card-text">{{ task.description }} </p>
+        <a href="/tasks_list/{{ task.id }}" type="button" class="btn-primary btn-sm">Go to task</a>
+      </div>
+    </div>
+  {% endfor %}
+{% endif %}
+</div>
+
