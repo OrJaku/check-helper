@@ -4,7 +4,15 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from .models import Task, Brand, DailyTask
 import datetime
+import pytz
 from datetime import timedelta
+
+
+def date_function():
+    time = datetime.datetime.today()
+    tz = pytz.timezone('Europe/Warsaw')
+    current_date = time.astimezone(tz)
+    return current_date
 
 
 def home(request, *args, **kwargs):
@@ -43,7 +51,7 @@ def tasks_list(request):
     sort = "end_data"
     sort_archive = "-end_data"
 
-    current_date = datetime.date.today()
+    current_date = date_function().date()
 
     tasks_user = Task.objects.all().filter(user=request.user).filter(brand=1)
     tasks_daily_user = Task.objects.all().filter(user=request.user).filter(brand=2)
@@ -165,7 +173,7 @@ def tasks_list(request):
                 messages.warning(request, f"You did not fill task data")
                 return redirect("/tasks_list/")
             elif name == "":
-                name = f"New task {datetime.datetime.now().strftime('%H:%M:%S')}"
+                name = f"New task {date_function().strftime('%H:%M:%S')}"
             else:
                 pass
 
@@ -182,7 +190,7 @@ def tasks_list(request):
         date_difference1 = []
 
         for task in lists:
-            difference1 = datetime.date.today() - task.first_date
+            difference1 = date_function().date() - task.first_date
             days1 = str(difference1).split(" ")
             try:
                 days1 = int(days1[0]) + 1

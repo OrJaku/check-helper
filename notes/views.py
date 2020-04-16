@@ -2,8 +2,15 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 import datetime
-from datetime import timedelta
+import pytz
 from .models import Notes
+
+
+def date_function():
+    time = datetime.datetime.today()
+    tz = pytz.timezone('Europe/Warsaw')
+    current_date = time.astimezone(tz)
+    return current_date
 
 
 @login_required(login_url='/user_login/')
@@ -14,13 +21,13 @@ def notes_list(request, *args, **kwargs):
             messages.warning(request, "You need to add title to note")
             return redirect("/notes_list/")
         description = request.POST.get("description")
-        time = datetime.datetime.now() + timedelta(hours=2)
-        time = time.strftime('%H:%M')
+        current_date = date_function()
+        current_time = current_date.strftime('%H:%M')
         new_note = Notes.objects.create(
             name=name,
             description=description,
             user=request.user,
-            time=time,
+            time=current_time,
             )
         new_note.save()
         return redirect("/notes_list/")
