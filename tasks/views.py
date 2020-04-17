@@ -17,7 +17,7 @@ def date_function():
 
 def home(request, *args, **kwargs):
     if request.user.is_authenticated:
-        tasks = Task.objects.all().filter(user=request.user)
+        tasks = Task.objects.all().filter(user=request.user).order_by("done")
         current_date = date_function().date()
         tasks_days_lower_then_three = []
         tasks_today = []
