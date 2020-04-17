@@ -1,5 +1,5 @@
-<div class="card">
-      <div class="card-header bg-primary text-white">Today</div>
+<div class="card" style="max-width: 20rem; min-width: 15rem;">
+<div class="card-header bg-primary text-white" align="center">Today</div>
       <p class="card-text"></p>
 
 {% if not tasks_today  %}
@@ -7,10 +7,16 @@
     <i>No tasks in this group</i>
   </div>
 {% else %}
-
   {% for task in tasks_today %}
-    <div class="card text-primary bg-border-primary mb-3" style="max-width: 18rem;">
-      <div class="card-header">{{task.brand.name}} task </div>
+    <div class="card text-primary bg-border-primary mb-3" style="max-width: 20rem;">
+      {% if task.done == True  %}
+      <span class="badge badge-pill badge-success text-success"> </span>
+      {% else %}
+      <span class="badge badge-pill badge-danger text-danger"> </span>
+      {% endif %}
+      <div class="card-header">{{ task.brand.name }} task
+
+      </div>
       <div class="card-body">
         <h5 class="card-title">{{task.name}}</h5>
         <p class="card-text">{{ task.info }}</p>

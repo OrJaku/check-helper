@@ -1,15 +1,23 @@
-<div class="card" >
-    <div class="card-header bg-primary text-white">You've got three days or less</div>
+<div class="card" style="max-width: 20rem; min-width: 15rem;">
+<div class="card-header bg-primary text-white" align="center">You've got three days or less</div>
     <p class="card-text"></p>
 
-{% if not tasks_days_lower_then_three  %}
+{% if not tasks_days_lower_then_three %}
   <div align="center">
     <i>No tasks in this group</i>
   </div>
 {% else %}
   {% for task in tasks_days_lower_then_three %}
     <div class="card text-primary bg-border-primary mb-3" style="max-width: 18rem;">
-      <div class="card-header">{{task.brand.name}} task </div>
+
+      {% if task.done == True  %}
+      <span class="badge badge-pill badge-success text-success"> </span>
+      {% else %}
+      <span class="badge badge-pill badge-danger text-danger"> </span>
+      {% endif %}
+      <div class="card-header">{{ task.brand.name }} task
+      </div>
+
       <div class="card-body">
         <h5 class="card-title">{{task.name}}</h5>
         <p class="card-text">{{ task.info }}</p>

@@ -31,7 +31,7 @@ def notes_list(request, *args, **kwargs):
             )
         new_note.save()
         return redirect("/notes_list/")
-    date = Notes.objects.all().values('date').distinct().order_by('-date')
+    date = Notes.objects.all().filter(user=request.user).values('date').distinct().order_by('-date')
     days_str = []
     days_date = []
     for i in date:

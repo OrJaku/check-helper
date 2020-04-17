@@ -2,3 +2,5 @@ db.sqlite3
 __pycache__/
 db_archve/
 static/admin/
+venv/
+.idea/
