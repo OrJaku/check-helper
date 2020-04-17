@@ -16,18 +16,19 @@ def date_function():
 @login_required(login_url='/user_login/')
 def notes_list(request, *args, **kwargs):
     if request.method == "POST":
-        name = request.POST.get("name")
-        if name == "":
-            messages.warning(request, "You need to add title to note")
-            return redirect("/notes_list/")
-        description = request.POST.get("description")
         current_date = date_function()
-        current_time = current_date.strftime('%H:%M')
+        name = request.POST.get("name")
+        if name == "" or name == " " or name == "  ":
+            name = f"Note {current_date.strftime('%H:%M:%S')}"
+        description = request.POST.get("description")
+        if description == "" or description == " " or description == "  ":
+            messages.warning(request, f"You did not file note")
+            return redirect("/notes_list/")
         new_note = Notes.objects.create(
             name=name,
             description=description,
             user=request.user,
-            time=current_time,
+            time=current_date.strftime('%H:%M'),
             )
         new_note.save()
         return redirect("/notes_list/")

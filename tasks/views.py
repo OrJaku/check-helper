@@ -391,7 +391,7 @@ def user_login(request):
         if user is not None:
             login(request, user)
             messages.success(request, f'Login success as user: {username}')
-            return redirect('/tasks_list/')
+            return redirect('/')
         else:
             messages.error(request, 'Invalid login or password')
         return render(request, 'home.html', {})
