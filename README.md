@@ -1,5 +1,5 @@
 ### Small django application with to-do/check list for personal use
-#### Technology: Python-Django, HTML/CSS, SQLite
+#### Technology: Python-Django, HTML/Bootstrap, SQLite
 #### Main features:
 - User login
 - Add/modify/remove tasks
