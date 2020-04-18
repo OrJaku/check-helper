@@ -15,7 +15,8 @@ from tasks.views import home, \
 
 from notes.views import notes_list, \
     delete_note, \
-    searching_notes
+    searching_notes, \
+    update_note
 
 
 urlpatterns = [
@@ -37,6 +38,7 @@ urlpatterns = [
 
     path('notes_list/', notes_list, name='notes_list'),
     path('delete_note/', delete_note, name='delete_note'),
+    path('update_note/', update_note, name='update_note'),
     path('searching_notes/', searching_notes, name='searching_notes'),
 ]
 

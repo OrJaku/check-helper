@@ -73,6 +73,20 @@ def delete_note(request):
 
 
 @login_required(login_url='/user_login/')
+def update_note(request):
+    if request.method == "POST":
+        note_id = request.POST.get("update_note")
+        print("note_id", note_id)
+        note = Notes.objects.get(id=note_id)
+        note.description = request.POST.get(f"description_{note_id}")
+        print("description__", note.description)
+        note.save()
+        messages.info(request, f"Note {note.name} updated")
+        return redirect('/notes_list/')
+    return render(request, 'notes_list.html', {})
+
+
+@login_required(login_url='/user_login/')
 def searching_notes(request):
     if request.method == "POST":
         def search_function(search_sentences):
