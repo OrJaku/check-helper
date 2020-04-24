@@ -7,10 +7,10 @@
         <h4> You have to <a  href="/user_login">Login</a> to get access to your data</h4>
     {%else%}
         <h4> Go to your <a  href="/tasks_list"> tasks</a> or <a  href="/notes_list">notes</a></h4>
-            <div class="card-deck">
+            <div class="card-columns" style="max-width: 60rem;" >
+                {% include 'quick_add_task.html' %}
                 {% include 'cart_tasks_daily.html' %}
                 {% include 'cart_tasks.html' %}
-
             </div>
     {%endif%}
 

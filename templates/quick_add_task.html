@@ -1,0 +1,23 @@
+<div class="card" style="max-width: 18rem; min-width: 15rem;">
+    <div class="card-header bg-primary text-white" align="center">Quick task</div>
+    <div class="card text-primary bg-border-primary mb-1" style="max-width: 18rem;">
+        <p class="card-text"></p>
+        <div class="text-primary ">
+            <form action='/tasks_list/' method="POST"> {% csrf_token %}
+                <p>
+                    <input type="text" class="form-control" name="name" placeholder="Your task">
+                </p>
+                <p>
+                    <input type="text" class="form-control" name="category" placeholder="Category">
+                </p>
+                <p>
+                    <input type="text" class="form-control" name="info" placeholder="Additional info">
+                </p>
+                <p>
+                    <input type="text" class="form-control" name="description" placeholder="Comment">
+                </p>
+                <center><button type="submit" name='add' value="home" class="btn btn-outline-primary btn-block">Add new task</button><br></center>
+            </form>
+        </div>
+    </div>
+</div>

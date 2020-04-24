@@ -164,6 +164,10 @@ def tasks_list(request):
                 return redirect('/tasks_list/')
             else:
                 pass
+            home_ = False
+            if 'home' in request.POST.get("add"):
+                home_ = True
+            print("TEST", request.POST)
             name = request.POST.get("name")
             category = request.POST.get("category")
             category = category.title()
@@ -171,23 +175,27 @@ def tasks_list(request):
             description = request.POST.get("description")
             priority = request.POST.get("priority")
             start_data = request.POST.get("start_data")
-            if start_data == "":
+            if start_data == "" or start_data is None:
                 start_data = current_date
             else:
                 pass
             try:
                 delta = int(request.POST.get("delta"))
-            except ValueError:
+            except (ValueError, TypeError):
                 delta = ""
 
-            if delta == "":
+            if delta == "" or delta is None:
                 delta = 10
             else:
                 pass
 
             end_data = request.POST.get("end_data")
-            if end_data == "":
+            if end_data == "" or end_data is None:
                 end_data = current_date + timedelta(delta)
+            else:
+                pass
+            if priority == "" or priority is None:
+                priority = 1
             else:
                 pass
             if name == "" and category == "" and info == "" and description == "":
@@ -200,8 +208,10 @@ def tasks_list(request):
 
             new_task(name, category, info, description, priority, request.user, start_data, end_data).save()
             messages.success(request, f"New task '{name}' has been added ")
-            return redirect('/tasks_list/')
-
+            if home_ is False:
+                return redirect('/tasks_list/')
+            else:
+                return redirect('/')
         else:
             return render(request, 'tasks_list.html', {})
 
@@ -274,12 +284,15 @@ def task_detail(request, task_id):
 def change_task_status(request):
     if request.method == "POST":
         list_ = False
+        home_ = False
         if "change_status" in request.POST:
             task_id = request.POST.get("change_status")
-
         elif "change_status_list" in request.POST:
             task_id = request.POST.get("change_status_list")
             list_ = True
+        elif "change_status_home" in request.POST:
+            task_id = request.POST.get("change_status_home")
+            home_ = True
         else:
             task_id = None
 
@@ -291,6 +304,8 @@ def change_task_status(request):
         task.save()
         if list_:
             return redirect("/tasks_list/")
+        elif home_:
+            return redirect("/")
         else:
             return redirect(f"/tasks_list/{task_id}")
     return render(request, 'tasks_list.html', {})

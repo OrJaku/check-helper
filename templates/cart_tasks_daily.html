@@ -1,4 +1,4 @@
-<div class="card" style="max-width: 20rem; min-width: 15rem;">
+<div class="card" style="max-width: 18rem; min-width: 15rem;">
 <div class="card-header bg-primary text-white" align="center">Today</div>
       <p class="card-text"></p>
 
@@ -8,20 +8,26 @@
   </div>
 {% else %}
   {% for task in tasks_today %}
-    <div class="card text-primary bg-border-primary mb-3" style="max-width: 20rem;">
-      {% if task.done == True  %}
-      <span class="badge badge-pill badge-success text-success"> </span>
-      {% else %}
-      <span class="badge badge-pill badge-danger text-danger"> </span>
-      {% endif %}
-      <div class="card-header">{{ task.brand.name }} task
-
+    <div class="card text-primary bg-border-primary mb-3" style="max-width: 25rem;">
+      <div class="card-header">
+          {% if task.done == True  %}
+            <span class="badge badge-pill badge-success text-success"> </span>
+          {% else %}
+            <span class="badge badge-pill badge-danger text-danger"> </span>
+          {% endif %}
+        {{ task.brand.name }} task
       </div>
       <div class="card-body">
         <h5 class="card-title">{{task.name}}</h5>
         <p class="card-text">{{ task.info }}</p>
         <p class="card-text">{{ task.description }} </p>
-        <a href="/tasks_list/{{ task.id }}" type="button" class="btn-primary btn-sm">Go to task</a>
+        <form method="POST" id="change_status" action="/change_task_status/">{% csrf_token %}</form>
+        <p>
+        <a href="/tasks_list/{{ task.id }}" type="button" class="btn btn-outline-primary btn-sm">Go to task</a>
+          {% if task.done == False %}
+            <button name="change_status_home" form="change_status" value={{task.id}} type="submit" class="btn btn-sm btn-outline-success ">Done</button>
+          {%endif%}
+        </p>
       </div>
     </div>
   {% endfor %}
