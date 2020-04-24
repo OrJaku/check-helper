@@ -121,13 +121,23 @@ def tasks_list(request):
 
     if request.method == "POST":
         if "daily" in request.POST:
+            if len(DailyTask.objects.all().filter(user=request.user)) >= 8:
+                messages.error(request, f"You can not have more then 8 daily tasks")
+                return redirect('/tasks_list/')
+            else:
+                pass
             tag = request.POST.get("tag")
+            if tag == "":
+                tag = f"#{date_function().strftime('%H%M%S')}"
+                messages.warning(request, f"Tag generated automatically: {tag}")
+
             name = request.POST.get("name")
-            if tag == "" or name == "":
-                messages.warning(request, f"You have to add tag and name of daily task")
-                return redirect("/tasks_list/")
+            if name == "":
+                name = f"daily_{date_function().strftime('%H%M%S')}"
+                messages.warning(request, f"Daily task name generated automatically: {name}")
             category = request.POST.get("category")
             description = request.POST.get("description")
+
             daily_task = DailyTask.objects.create(
                 tag=tag,
                 name=name,
@@ -149,6 +159,11 @@ def tasks_list(request):
                 sort = "" + sort
 
         elif "add" in request.POST:
+            if len(Task.objects.all().filter(user=request.user)) >= 150:
+                messages.error(request, f"You can not have more then 150 tasks")
+                return redirect('/tasks_list/')
+            else:
+                pass
             name = request.POST.get("name")
             category = request.POST.get("category")
             category = category.title()
