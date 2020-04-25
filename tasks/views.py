@@ -42,7 +42,6 @@ def daily_generator(current_date, user):
     daily_task_list_name = [name[0] for name in tasks_daily_user.values_list('name')]
     daily_task_info = str(current_date)
     tasks_daily_settings = DailyTask.objects.all().filter(user=user)
-
     for task_daily_settings in tasks_daily_settings:
         if daily_task_info not in daily_task_list_info or task_daily_settings.name not in daily_task_list_name:
             daily_task = DailyTask.objects.get(id=task_daily_settings.id)
@@ -60,10 +59,9 @@ def daily_generator(current_date, user):
                 current_date,
                 current_date,
                 Brand.objects.get(id=2),
-            ).save()
+                ).save()
         else:
             pass
-        return tasks_daily_user
 
 
 def new_task(
