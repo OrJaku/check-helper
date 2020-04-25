@@ -1,0 +1,57 @@
+
+
+{% if found_by_tag is None or not found_by_tag %}
+
+{% else %}
+<p>
+    <button class="btn btn-outline-secondary btn-lg btn-block" type="button" data-toggle="collapse" data-target="#tags" aria-expanded="false" aria-controls="tags">
+        Found in note Tag
+    </button>
+</p>
+<div class="collapse" id="tags">
+    <div class="card card-body">
+        <div class="row">
+            {% for title, note  in found_by_tag.items %}
+            <div class="col-sm-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ title }}<font color="gray" size="2px"><i> {{ note.2 }} - {{ note.1 }}</i></font></h5>
+                        <p class="card-text">{{ note.0 }}</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endif %}
+
+
+{% if found_by_description is None or not found_by_description %}
+
+{% else %}
+<p>
+    <button class="btn btn-outline-secondary btn-lg btn-block" type="button" data-toggle="collapse" data-target="#notes" aria-expanded="false" aria-controls="notes">
+        Found in Notes
+    </button>
+</p>
+<div class="collapse" id="notes">
+    <div class="card card-body">
+        <div class="row">
+            {% for title, note  in found_by_description.items %}
+            <div class="col-sm-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ title }}<font color="gray" size="2px"><i> {{ note.2 }} - {{ note.1 }}</i></font></h5>
+                        <p class="card-text">{{ note.0 }}</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endif %}
+
+
+

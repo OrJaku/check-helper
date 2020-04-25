@@ -12,8 +12,17 @@
       <div class="collapse" id="collapseNewNote">
         <div class="card card-body">
             <form method="POST" action=".">{% csrf_token %}
-                <b>Title:</b>
-                    <input type="text"  class="form-control" name='name' >
+                <form action='.' method="POST"> {% csrf_token %}
+                    <div class="row">
+                        <div class="col">
+                            <b>Title:</b>
+                                <input type="text"  class="form-control" name='name'>
+                        </div>
+                        <div class="col">
+                            <b>Tag:</b>
+                                <input type="text"  class="form-control" name='tag'>
+                        </div>
+                    </div>
                 <b>Note:</b>
                     <textarea  class="form-control" rows="3" cols="1"  name='description' ></textarea><br>
                 <center><button type="submit" name="now_note" class="btn btn-secondary btn-lg btn-block">New note +</button><br></center>

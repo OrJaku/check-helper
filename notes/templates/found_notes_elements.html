@@ -1,19 +1,35 @@
-{% if found_by_name is None or not found_by_name %}
+{% if founds is None or not founds %}
 
 {% else %}
 <p>
-<button class="btn btn-outline-secondary btn-lg btn-block" type="button" data-toggle="collapse" data-target="#titles" aria-expanded="false" aria-controls="titles">
-          Found in note Titles
+<button class="btn btn-outline-secondary btn-lg btn-block" type="button" data-toggle="collapse" data-target="#found_{{num}}" aria-expanded="false" aria-controls="found_{{num}}">
+    Found in note
+        {% if num == 0 %}
+            Titles
+        {% elif num == 1 %}
+            Notes
+        {% elif num == 2 %}
+            Tags
+        {% else %}
+            Somewhere
+        {% endif %}
+
 </button>
 </p>
-<div class="collapse" id="titles">
+<div class="collapse" id="found_{{num}}">
     <div class="card card-body">
         <div class="row">
-        {% for title, note  in found_by_name.items %}
+        {% for title, note  in founds.items %}
               <div class="col-sm-6">
                 <div class="card">
                   <div class="card-body">
-                    <h5 class="card-title">{{ title }}<font color="gray" size="2px"><i> {{ note.2 }} - {{ note.1 }}</i></font></h5>
+                      <h5 class="card-title">
+                          {{ title }}
+                          <font color="gray" size="2px"><i> {{ note.2 }} - {{ note.1 }}</i></font>
+                      </h5>
+                      <p class="text-primary text-sm">
+                          #{{ note.3 }}
+                      </p>
                     <p class="card-text">{{ note.0 }}</p>
                   </div>
                 </div>
@@ -23,32 +39,5 @@
     </div>
 </div>
 {% endif %}
-
-{% if found_by_description is None or not found_by_description %}
-
-{% else %}
-<p>
-    <button class="btn btn-outline-secondary btn-lg btn-block" type="button" data-toggle="collapse" data-target="#notes" aria-expanded="false" aria-controls="notes">
-              Found in Notes
-    </button>
-</p>
-<div class="collapse" id="notes">
-    <div class="card card-body">
-        <div class="row">
-        {% for title, note  in found_by_description.items %}
-              <div class="col-sm-6">
-                <div class="card">
-                  <div class="card-body">
-                    <h5 class="card-title">{{ title }}<font color="gray" size="2px"><i> {{ note.2 }} - {{ note.1 }}</i></font></h5>
-                    <p class="card-text">{{ note.0 }}</p>
-                  </div>
-                </div>
-              </div>
-        {% endfor %}
-        </div>
-    </div>
-</div>
-{% endif %}
-
 
 

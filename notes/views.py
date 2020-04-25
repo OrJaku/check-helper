@@ -20,14 +20,17 @@ def notes_list(request, *args, **kwargs):
         name = request.POST.get("name")
         if name == "" or name == " " or name == "  ":
             name = f"Note {current_date.strftime('%H:%M:%S')}"
+
         description = request.POST.get("description")
         if description == "" or description == " " or description == "  ":
             messages.warning(request, f"You did not file note")
             return redirect("/notes_list/")
+        tag = request.POST.get("tag")
         new_note = Notes.objects.create(
             name=name,
             description=description,
             user=request.user,
+            tag=tag,
             time=current_date.strftime('%H:%M'),
             )
         new_note.save()
@@ -41,8 +44,11 @@ def notes_list(request, *args, **kwargs):
     date = zip(days_str, days_date)
 
     notes = Notes.objects.all().filter(user=request.user).order_by('-time')
+    founds_list = []
     found_by_name = request.session.get('found_by_name')
     found_by_description = request.session.get('found_by_description')
+    found_by_tag = request.session.get('found_by_tag')
+
     try:
         del request.session['found_by_name']
     except KeyError:
@@ -51,12 +57,20 @@ def notes_list(request, *args, **kwargs):
         del request.session['found_by_description']
     except KeyError:
         found_by_description = None
+    try:
+        del request.session['found_by_tag']
+    except KeyError:
+        found_by_tag = None
+
+    founds_list.append(found_by_name)
+    founds_list.append(found_by_description)
+    founds_list.append(found_by_tag)
+    founds_list_enumerate = enumerate(founds_list)
 
     context = {
         "notes": notes,
         "date": date,
-        "found_by_name": found_by_name,
-        "found_by_description": found_by_description
+        "founds_list_enumerate": founds_list_enumerate,
     }
     return render(request, 'notes_list.html', context)
 
@@ -93,12 +107,19 @@ def searching_notes(request):
             notes_name = Notes.objects.filter(name__contains=search_sentences).filter(user=request.user)
             found_in_name = {}
             for note in notes_name:
-                found_in_name[note.name] = [note.description, note.time, str(note.date)]
+                found_in_name[note.name] = [note.description, note.time, str(note.date), note.tag]
+
             notes_description = Notes.objects.filter(description__contains=search_sentences).filter(user=request.user)
             found_in_description = {}
             for note in notes_description:
-                found_in_description[note.name] = [note.description, note.time, str(note.date)]
-            return found_in_name, found_in_description
+                found_in_description[note.name] = [note.description, note.time, str(note.date), note.tag]
+
+            notes_tag = Notes.objects.filter(tag__contains=search_sentences).filter(user=request.user)
+            found_in_tag = {}
+            for note in notes_tag:
+                found_in_tag[note.name] = [note.description, note.time, str(note.date), note.tag]
+
+            return found_in_name, found_in_description, found_in_tag
         search = request.POST["search"]
         if search == "":
             messages.info(request, "Fill searching window..")
@@ -107,10 +128,11 @@ def searching_notes(request):
             pass
 
         found_elements = search_function(search)
-        if not found_elements[0] and not found_elements[1]:
+        if not found_elements[0] and not found_elements[1] and not found_elements[2]:
             messages.warning(request, "No result found..")
         request.session["found_by_name"] = found_elements[0]
         request.session["found_by_description"] = found_elements[1]
+        request.session["found_by_tag"] = found_elements[2]
 
         return redirect("/notes_list/")
 

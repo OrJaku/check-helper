@@ -3,7 +3,9 @@
 <body>
     <h5><b>{{request.user}}'s</b> notes</h5>
     {% include 'add_note.html' %}
-    {% include 'found_notes_elements.html' %}
+    {% for num, founds in founds_list_enumerate %}
+        {% include 'found_notes_elements.html' %}
+    {% endfor %}
 
     {%for day_str, day_date in date%}
     <p>
@@ -20,7 +22,13 @@
                       <div class="col-sm-6">
                         <div class="card">
                           <div class="card-body">
-                            <h5 class="card-title">{{ note.name }} <font color="gray" size="2px"><i>{{ note.time }}</i></font></h5>
+                            <h5 class="card-title">
+                                {{ note.name }}
+                                <font color="gray" size="2px"><i> {{ note.time }}</i></font>
+                            </h5>
+                              <p class="text-primary text-sm">
+                                  #{{ note.tag }}
+                              </p>
                               <textarea  class="form-control" form="update_note" rows="3"   name='description_{{note.id}}' >{{ note.description }}</textarea>
                               <form method="POST" id="update_note" action="/update_note/">{% csrf_token %}</form>
                               <form method="POST" id="delete_note" action="/delete_note/">{% csrf_token %}</form>
