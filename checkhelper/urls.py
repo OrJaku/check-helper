@@ -16,7 +16,9 @@ from tasks.views import home, \
 from notes.views import notes_list, \
     delete_note, \
     searching_notes, \
-    update_note
+    update_note, \
+    note_detail, \
+    tag_list
 
 
 urlpatterns = [
@@ -37,8 +39,10 @@ urlpatterns = [
     path('user_logout/', user_logout, name='user_logout'),
 
     path('notes_list/', notes_list, name='notes_list'),
+    path('notes_list/<int:note_id>', note_detail, name='note_detail'),
+    path('notes_list/<int:note_id>/update_note/', update_note, name='update_note'),
+    path('notes_list/<tag>', tag_list, name='tag_list'),
     path('delete_note/', delete_note, name='delete_note'),
-    path('update_note/', update_note, name='update_note'),
     path('searching_notes/', searching_notes, name='searching_notes'),
 ]
 

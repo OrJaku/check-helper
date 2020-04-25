@@ -1,0 +1,46 @@
+ <nav class="navbar navbar-light bg-light justify-content-between">
+     <div class="btn-group dropright">
+         <div class="col">
+         <button class="btn btn-secondary"   type="button" data-toggle="collapse" data-target="#collapseNewNote" aria-expanded="false" aria-controls="collapseNewNote">
+          New note +
+         </button>
+         </div>
+      <div class="dropdown">
+          <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownTag" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Tag
+          </button>
+          <div class="dropdown-menu" aria-labelledby="dropdownTag">
+              {% for tag in unique_tags %}
+              <a class="dropdown-item" href="/notes_list/{{tag}}">{{tag}}</a>
+              {% endfor %}
+          </div>
+      </div>
+
+     </div>
+
+  <form class="form-inline" method="POST" action="/searching_notes/">{% csrf_token %}
+    <input class="form-control mr-sm-2" type="search" name="search" placeholder="Search" aria-label="Search">
+    <button class="btn btn-outline-secondary my- my-sm-0"  type="submit">Search</button>
+  </form>
+</nav>
+    <br>
+      <div class="collapse" id="collapseNewNote">
+        <div class="card card-body">
+            <form method="POST" action=".">{% csrf_token %}
+                    <div class="row">
+                        <div class="col">
+                            <b>Title:</b>
+                                <input type="text"  class="form-control" name='name' placeholder="Note {{auto_name}}">
+                        </div>
+                        <div class="col">
+                            <b>Tag:</b>
+                                <input type="text"  class="form-control" name='tag' placeholder="NoTag">
+                        </div>
+                    </div>
+                <b>Note: *</b>
+                    <textarea  class="form-control" rows="3" cols="1"  name='description' ></textarea><br>
+                <center><button type="submit" name="now_note" class="btn btn-secondary btn-lg btn-block">Save +</button><br></center>
+            </form>
+        </div>
+    </div>
+

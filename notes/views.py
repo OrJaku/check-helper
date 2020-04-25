@@ -15,17 +15,19 @@ def date_function():
 
 @login_required(login_url='/user_login/')
 def notes_list(request, *args, **kwargs):
+    current_date = date_function()
+    auto_name = current_date.strftime('%H:%M:%S')
     if request.method == "POST":
-        current_date = date_function()
         name = request.POST.get("name")
         if name == "" or name == " " or name == "  ":
-            name = f"Note {current_date.strftime('%H:%M:%S')}"
-
+            name = f"Note {auto_name}"
         description = request.POST.get("description")
         if description == "" or description == " " or description == "  ":
             messages.warning(request, f"You did not file note")
             return redirect("/notes_list/")
         tag = request.POST.get("tag")
+        if tag == "" or tag == " " or tag == "  ":
+            tag = "NoTag"
         new_note = Notes.objects.create(
             name=name,
             description=description,
@@ -61,16 +63,21 @@ def notes_list(request, *args, **kwargs):
         del request.session['found_by_tag']
     except KeyError:
         found_by_tag = None
-
+    auto_name = current_date.strftime('%H:%M:%S')
     founds_list.append(found_by_name)
     founds_list.append(found_by_description)
     founds_list.append(found_by_tag)
     founds_list_enumerate = enumerate(founds_list)
 
+    unique_tags = Notes.objects.values_list('tag').filter(user=request.user).distinct()
+    unique_tags = [tag[0] for tag in unique_tags]
+    print("unique_tags", unique_tags)
     context = {
         "notes": notes,
         "date": date,
         "founds_list_enumerate": founds_list_enumerate,
+        "auto_name": auto_name,
+        "unique_tags": unique_tags,
     }
     return render(request, 'notes_list.html', context)
 
@@ -86,18 +93,41 @@ def delete_note(request):
     return render(request, 'notes_list.html', {})
 
 
+def tag_list(request, tag):
+    print(tag)
+    notes_by_tag = Notes.objects.all().filter(tag=tag)
+    context = {
+        "tag": tag,
+        "notes_by_tag": notes_by_tag,
+    }
+    return render(request, 'tag_list.html', context)
+
+
 @login_required(login_url='/user_login/')
-def update_note(request):
+def update_note(request, note_id):
     if request.method == "POST":
-        note_id = request.POST.get("update_note")
-        print("note_id", note_id)
         note = Notes.objects.get(id=note_id)
-        note.description = request.POST.get(f"description_{note_id}")
-        print("description__", note.description)
+        note.name = request.POST.get('name')
+        note.tag = request.POST.get('tag')
+        note.description = request.POST.get('description')
         note.save()
         messages.info(request, f"Note {note.name} updated")
-        return redirect('/notes_list/')
+        return redirect(f'/notes_list/{note_id}')
     return render(request, 'notes_list.html', {})
+
+
+@login_required(login_url='/user_login/')
+def note_detail(request, note_id):
+    try:
+        note = Notes.objects.get(id=note_id)
+        context = {
+            'note': note,
+        }
+        return render(request, 'note_detail.html', context)
+
+    except Notes.DoesNotExist:
+        context = {}
+        return render(request, 'home.html', context)
 
 
 @login_required(login_url='/user_login/')
@@ -107,17 +137,17 @@ def searching_notes(request):
             notes_name = Notes.objects.filter(name__contains=search_sentences).filter(user=request.user)
             found_in_name = {}
             for note in notes_name:
-                found_in_name[note.name] = [note.description, note.time, str(note.date), note.tag]
+                found_in_name[note.name] = [note.description, note.time, str(note.date), note.tag, note.id]
 
             notes_description = Notes.objects.filter(description__contains=search_sentences).filter(user=request.user)
             found_in_description = {}
             for note in notes_description:
-                found_in_description[note.name] = [note.description, note.time, str(note.date), note.tag]
+                found_in_description[note.name] = [note.description, note.time, str(note.date), note.tag, note.id]
 
             notes_tag = Notes.objects.filter(tag__contains=search_sentences).filter(user=request.user)
             found_in_tag = {}
             for note in notes_tag:
-                found_in_tag[note.name] = [note.description, note.time, str(note.date), note.tag]
+                found_in_tag[note.name] = [note.description, note.time, str(note.date), note.tag, note.id]
 
             return found_in_name, found_in_description, found_in_tag
         search = request.POST["search"]

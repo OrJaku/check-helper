@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block page %}
+<body>
+    {% for note in notes_by_tag%}
+            <div class="row">
+                {% include 'note_cart.html' %}
+            </div>
+    {% endfor %}
+</body>
+{% endblock %}
+
