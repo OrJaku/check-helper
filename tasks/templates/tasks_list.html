@@ -4,14 +4,29 @@
 <body>
     <h5><b>{{request.user}}'s</b> tasks</h5>
     <nav class="navbar navbar-light bg-light justify-content-between">
-            <a class="navbar-brand">
-      <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseNewTask" aria-expanded="false" aria-controls="collapseNewTask">
-          New task +
-      </button>
-      <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseDailyTasks" aria-expanded="false" aria-controls="collapseDailyTasks">
-          Daily tasks
-      </button></a>
-        <form class="form-inline" method="POST" action="/searching_tasks/">{% csrf_token %}
+        <div class="btn-group dropright">
+            <div class="column">
+            <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseNewTask" aria-expanded="false" aria-controls="collapseNewTask">
+              New task +
+            </button>
+
+            <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseDailyTasks" aria-expanded="false" aria-controls="collapseDailyTasks">
+              Daily tasks
+            </button>
+
+            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownTag" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Categories
+            </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownTag">
+                            {% for category in unique_categories %}
+                                <form method="POST" action="/tasks_list/">{% csrf_token %}
+                                    <button class="dropdown-item" name="category" value={{category}}>{{category}}</button>
+                                </form>
+                            {% endfor %}
+                    </div>
+                </div>
+            </div>
+        <form class="form-inline" method="POST" action="/searching_tasks/">
             <input class="form-control mr-sm-2" type="search" name="search" placeholder="Search" aria-label="Search">
         <button class="btn btn-outline-primary my- my-sm-0"  type="submit">Search</button>
   </form>
@@ -83,7 +98,7 @@
 
       <tr class="table-success">
         {%else%}
-            <tr class="table-warning" >
+            <tr style="background-color:  #e6f5ff;">
         {%endif%}
             <th scope="row"></th>
             <td><b>

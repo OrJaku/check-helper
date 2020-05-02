@@ -71,7 +71,6 @@ def notes_list(request, *args, **kwargs):
 
     unique_tags = Notes.objects.values_list('tag').filter(user=request.user).distinct()
     unique_tags = [tag[0] for tag in unique_tags]
-    print("unique_tags", unique_tags)
     context = {
         "notes": notes,
         "date": date,

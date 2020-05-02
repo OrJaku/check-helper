@@ -118,6 +118,14 @@ def tasks_list(request):
     sort_archive = "-end_data"
     current_date = date_function().date()
 
+    def categories():
+        categories_list = Task.objects.values_list('category').filter(user=request.user).distinct()
+        categories_list = [cat[0] for cat in categories_list]
+        return categories_list
+    unique_categories = categories()
+    unique_categories.append('All')
+    filtering_categories = categories()
+
     daily_generator(current_date, request.user)
 
     if request.method == "POST":
@@ -212,6 +220,13 @@ def tasks_list(request):
                 return redirect('/tasks_list/')
             else:
                 return redirect('/')
+        elif "category" in request.POST:
+            new_category = [request.POST.get("category")]
+
+            if new_category[0] == "All":
+                pass
+            else:
+                filtering_categories = new_category
         else:
             return render(request, 'tasks_list.html', {})
 
@@ -244,11 +259,20 @@ def tasks_list(request):
             date_difference.append(numbers_days)
         zipped_list = zip(lists, date_difference)
         return zipped_list
+    print("filtering_categories:", filtering_categories)
 
     daily_tasks_user_with_completed_days = zipping_daily(daily_tasks_user)
-    tasks_user = Task.objects.all().filter(user=request.user).filter(brand=1)
-    tasks_daily_user = Task.objects.all().filter(user=request.user).filter(brand=2)
-    tasks_user_archive = Task.objects.all().filter(user=request.user)
+    tasks_user = Task.objects.all().filter(user=request.user).\
+        filter(brand=1).\
+        filter(category__in=filtering_categories)
+
+    tasks_daily_user = Task.objects.all().\
+        filter(user=request.user).filter(brand=2).\
+        filter(category__in=filtering_categories)
+
+    tasks_user_archive = Task.objects.all().\
+        filter(user=request.user).\
+        filter(category__in=filtering_categories)
 
     tasks_user_with_date_difference = zipping(tasks_user.order_by(sort))
     tasks_user_archive_with_date_difference = zipping(tasks_user_archive.order_by(sort_archive))
@@ -259,12 +283,14 @@ def tasks_list(request):
         del request.session['found_elements']
     except KeyError:
         found_elements = None
+
     context = {
         'tasks': tasks_user_with_date_difference,
         'tasks_archive': tasks_user_archive_with_date_difference,
         'tasks_daily': tasks_daily_user_with_date_difference,
         'daily_tasks_user_with_completed_days': daily_tasks_user_with_completed_days,
         'found_elements': found_elements,
+        'unique_categories': unique_categories,
     }
     return render(request, 'tasks_list.html', context)
 
