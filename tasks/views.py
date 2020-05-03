@@ -43,6 +43,8 @@ def daily_generator(current_date, user):
     daily_task_info = str(current_date)
     tasks_daily_settings = DailyTask.objects.all().filter(user=user)
     for task_daily_settings in tasks_daily_settings:
+        print("DT", task_daily_settings.name)
+        print('T', daily_task_list_name)
         if daily_task_info not in daily_task_list_info or task_daily_settings.name not in daily_task_list_name:
             daily_task = DailyTask.objects.get(id=task_daily_settings.id)
             if daily_task.name == "":
@@ -64,6 +66,13 @@ def daily_generator(current_date, user):
             pass
 
 
+def spaces_remover(sentence):
+    sentence = sentence.strip()
+    sentence = sentence.replace('   ', ' ')
+    sentence = sentence.replace('  ', ' ')
+    return sentence
+
+
 def new_task(
         name_task,
         category_task,
@@ -75,6 +84,8 @@ def new_task(
         end_data_task,
         brand=Brand.objects.get(id=1),
         ):
+    name_task = spaces_remover(name_task)
+    category_task = spaces_remover(category_task)
     task = Task.objects.create(
         name=name_task,
         category=category_task,
@@ -119,7 +130,7 @@ def tasks_list(request):
     current_date = date_function().date()
 
     def categories():
-        categories_list = Task.objects.values_list('category').filter(user=request.user).distinct()
+        categories_list = Task.objects.values_list('category').filter(user=request.user).distinct().order_by('category')
         categories_list = [cat[0] for cat in categories_list]
         return categories_list
     unique_categories = categories()
@@ -146,7 +157,9 @@ def tasks_list(request):
                 messages.warning(request, f"Daily task name generated automatically: {name}")
             category = request.POST.get("category")
             description = request.POST.get("description")
-
+            name = spaces_remover(name)
+            category = spaces_remover(category)
+            category.title()
             daily_task = DailyTask.objects.create(
                 tag=tag,
                 name=name,
@@ -259,7 +272,6 @@ def tasks_list(request):
             date_difference.append(numbers_days)
         zipped_list = zip(lists, date_difference)
         return zipped_list
-    print("filtering_categories:", filtering_categories)
 
     daily_tasks_user_with_completed_days = zipping_daily(daily_tasks_user)
     tasks_user = Task.objects.all().filter(user=request.user).\
@@ -355,20 +367,28 @@ def delete_task(request):
 def update_task(request, task_id):
     if request.method == "POST":
         task = Task.objects.get(id=task_id)
-        task.name = request.POST.get("name")
-        task.category = request.POST.get("category")
+        name = request.POST.get("name")
+        name = spaces_remover(name)
+        task.name = name
+
+        category = request.POST.get("category")
+        category = spaces_remover(category)
+        task.category = category
         task.info = request.POST.get("info")
         task.description = request.POST.get("description")
-        task.priority = request.POST.get("priority")
+        priority = request.POST.get("priority")
+        if priority == "" or priority is None:
+            task.priority = 1
 
         start_data = request.POST.get("start_data")
-        if start_data == "":
+        if start_data == "" or start_data is None:
             pass
         else:
             task.end_data = start_data
 
         end_data = request.POST.get("end_data")
-        if end_data == "":
+        print(end_data)
+        if end_data == "" or end_data is None:
             pass
         else:
             task.end_data = end_data
