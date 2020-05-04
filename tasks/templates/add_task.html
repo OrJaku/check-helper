@@ -1,34 +1,46 @@
 <form action='.' method="POST"> {% csrf_token %}
-      <div class="row">
-          <div class="col">
-              <input type="text" class="form-control" name="name" placeholder="Your task">
+      <div class="form-row">
+          <div class="col col-md-5">
+              <input type="text" class="form-control" name="name" placeholder="Your task*">
           </div>
-          <div class="col">
-              <input type="text" class="form-control" name="category" placeholder="Category">
+          <div class="col col-md-3">
+              <input type="text" class="form-control" name="category" placeholder="Category*">
           </div>
-          <div class="col">
+
+          <div class="col col-md-2">
+              <select class="custom-select" name="category_select" id="inlineFormCustomSelect">
+                  <option selected>.. or choose category</option>
+                  {% for category  in unique_categories %}
+                  <option value={{category}}>{{category}}</option>
+                  {% endfor %}
+              </select>
+          </div>
+
+          <div class="col col-md-2" >
               <input type="text" class="form-control" name="info" placeholder="Additional info">
           </div>
-          <div class="col">
-              <input type="text" class="form-control" name="description" placeholder="Comment">
-          </div>
+
            <br>
       </div>
           <div class="row col-form-label-sm">
-          <div class="col">
+          <div class="col col-md-4" >
+              <label>Comment</label>
+              <input type="text" class="form-control" name="description" placeholder="Comment..">
+          </div>
+          <div class="col col-md-3">
               <label  >First day <small class="text-muted">(default = current date)</small></label>
                     <input type="date" class="form-control" id="start" name="start_data">
           </div>
-          <div class="col">
+          <div class="col col-md-3" >
               <label for="end">Last day <small class="text-muted">(default = First day + delta)</small></label>
                     <input type="date" class="form-control" id="end" name="end_data">
           </div>
-              <div class="col">
+              <div class="col col-md-1">
                   <label for="delta">Days: </label>
                     <input type="text" class="form-control" id="delta" name="delta" placeholder="10">
           </div>
-              <div class="col">
-                  <label>Priority: <small class="text-muted">(1-low, 2-mid, 3-high priority)</small></label>
+              <div class="col col-md-1">
+                  <label>Priority: <small class="text-muted"></small></label>
                       <select name='priority' class="custom-select" id="inputGroupSelect01">
                           <option value=1>1</option>
                           <option value=2>2</option>

@@ -18,11 +18,11 @@
                 Categories
             </button>
                     <div class="dropdown-menu" aria-labelledby="dropdownTag">
-                            {% for category in unique_categories %}
-                                <form method="POST" action="/tasks_list/">{% csrf_token %}
-                                    <button class="dropdown-item" name="category" value={{category}}>{{category}}</button>
-                                </form>
-                            {% endfor %}
+                        {% for category in unique_categories %}
+                            <form method="POST" id="cat_list" action="/tasks_list/">{% csrf_token %}</form>
+                                <button class="dropdown-item" form="cat_list" name="category" value={{category}}>{{category}}</button>
+                        {% endfor %}
+                                <button class="dropdown-item" form="cat_list" name="category" value="All">All</button>
                     </div>
                 </div>
             </div>
@@ -53,13 +53,13 @@
             </form>
         </th>
         <th scope="col">
-            <form method="POST"  action=".">{% csrf_token %}
-                 <button name="sort" type="submit"  value="info" class="btn btn-active btn-sm">Info</button>
+            <form method="POST" action=".">{% csrf_token %}
+                <button name="sort" type="submit"  value="category" class="btn btn-active btn-sm">Category</button>
             </form>
         </th>
         <th scope="col">
-            <form method="POST" action=".">{% csrf_token %}
-                 <button name="sort" type="submit"  value="category" class="btn btn-active btn-sm">Category</button>
+            <form method="POST"  action=".">{% csrf_token %}
+                 <button name="sort" type="submit"  value="info" class="btn btn-active btn-sm">Info</button>
             </form>
         </th>
         <th scope="col">
@@ -104,15 +104,14 @@
             <td><b>
                 <a href="/tasks_list/{{task.id}}">{{task.name}} </a></b>
             </td>
+            <td><font color="#3366ff">{{task.category}}</font></td>
             <td><font color="#3366ff"> {{task.end_data}}</font>
                     {%if diff == 0%}
 
                     {%else %}
                         <font color=#e3493d>[{{diff}}]</font>
                     {%endif%}
-
             </td>
-            <td><font color="#3366ff">{{task.category}}</font></td>
             <td><font color="#3366ff">{{task.description}}</font></td>
             <td><center><font color="#3366ff">-</font></center></td>
             <td><font color="#3366ff">-</font></td>
@@ -150,8 +149,8 @@
             <th scope="row"></th>
             <td><b><a href="/tasks_list/{{task.id}}">{{task.name}} </a></b>
             </td>
-            <td>{{task.info}}</td>
             <td>{{task.category}}</td>
+            <td>{{task.info}}</td>
             <td>{{task.description}}</td>
             <td><center>{{task.priority}}</center></td>
             <td>{{task.start_data}}</td>
@@ -207,12 +206,12 @@
                     <th scope="row"></th>
                     <td><b><a href="/tasks_list/{{task.id}}">{{task.name}} </a></b>
                     </td>
+                    <td>{{task.category}}</td>
                     <td>{{task.end_data}}<br>
                     {%if task.brand.id == 2%}
                         <i>(Daily task)</i>
                     {%endif%}
                     </td>
-                    <td>{{task.category}}</td>
                     <td>{{task.description}}</td>
                     <td>{{task.start_data}}</td>
                     <td>{{task.end_data}} {%if diff <= 2 %}

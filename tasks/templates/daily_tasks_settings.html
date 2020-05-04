@@ -1,17 +1,22 @@
 
  <body>
     <form method="POST" action="/tasks_list/">{% csrf_token %}
-      <div class="row">
-          <div class="col">
-              <input type="text" class="form-control" name="tag" placeholder="Tag">
+      <div class="form-row">
+          <div class="col col-md-4">
+              <input type="text" class="form-control" name="name" placeholder="Your task*">
           </div>
-          <div class="col">
-              <input type="text" class="form-control" name="name" placeholder="Your task">
-          </div>
-          <div class="col">
-              <input type="text" class="form-control" name="category" placeholder="Category">
-          </div>
-          <div class="col">
+            <div class="col col-md-2">
+                <input type="text" class="form-control" name="category" placeholder="New category*">
+            </div>
+            <div class="col col-md-2" >
+                <select class="custom-select" name="category_select" id="inlineFormCustomSelect">
+                    <option selected>.. or choose category</option>
+                    {% for category  in unique_categories %}
+                        <option value={{category}}>{{category}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+          <div class="col col-md-4">
               <input type="text" class="form-control" name="description" placeholder="Comment">
           </div>
       </div><br>
@@ -20,7 +25,6 @@
   <table class="table">
   <thead>
     <tr>
-      <th scope="col">Tag</th>
       <th scope="col">Daily task</th>
       <th scope="col">Category</th>
       <th scope="col">Comment</th>
@@ -33,7 +37,6 @@
   <tbody>
         {% for task_daily, difference in daily_tasks_user_with_completed_days %}
             <tr>
-                <td>{{task_daily.tag}}</td>
                 <td>{{task_daily.name}}</td>
                 <td>{{task_daily.category}}</td>
                 <td>{{task_daily.description}}</td>
@@ -52,7 +55,7 @@
                       <div class="modal-dialog" role="document">
                         <div class="modal-content">
                           <div class="modal-header">
-                            <h5 class="modal-title" id="staticBackdropLabel">{{task_daily.tag}} - {{task_daily.name}}</h5>
+                            <h5 class="modal-title" id="staticBackdropLabel">{{task_daily.name}}</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                               <span aria-hidden="true">&times;</span>
                             </button>

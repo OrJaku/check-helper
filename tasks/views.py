@@ -15,6 +15,10 @@ def date_function():
     return current_date
 
 
+def first_upper_letter(sentence):
+    return sentence[:1].upper() + sentence[1:]
+
+
 def daily_generator(current_date, user):
     tasks_daily_user = Task.objects.all().filter(user=user).filter(brand=2)
     for task_daily_user in tasks_daily_user:
@@ -43,8 +47,6 @@ def daily_generator(current_date, user):
     daily_task_info = str(current_date)
     tasks_daily_settings = DailyTask.objects.all().filter(user=user)
     for task_daily_settings in tasks_daily_settings:
-        print("DT", task_daily_settings.name)
-        print('T', daily_task_list_name)
         if daily_task_info not in daily_task_list_info or task_daily_settings.name not in daily_task_list_name:
             daily_task = DailyTask.objects.get(id=task_daily_settings.id)
             if daily_task.name == "":
@@ -130,11 +132,27 @@ def tasks_list(request):
     current_date = date_function().date()
 
     def categories():
-        categories_list = Task.objects.values_list('category').filter(user=request.user).distinct().order_by('category')
-        categories_list = [cat[0] for cat in categories_list]
-        return categories_list
+        categories_list_tasks = Task.objects.\
+            values_list('category').\
+            filter(user=request.user).\
+            distinct().\
+            order_by('category')
+        categories_list_tasks = [cat[0] for cat in categories_list_tasks]
+
+        categories_list_daily_task = DailyTask.objects.\
+            values_list('category').\
+            filter(user=request.user).\
+            distinct().\
+            order_by('category')
+        categories_list_daily_task = [cat[0] for cat in categories_list_daily_task]
+
+        for cat in categories_list_daily_task:
+            if cat not in categories_list_tasks:
+                categories_list_tasks.append(cat)
+
+        return categories_list_tasks
+
     unique_categories = categories()
-    unique_categories.append('All')
     filtering_categories = categories()
 
     daily_generator(current_date, request.user)
@@ -146,29 +164,32 @@ def tasks_list(request):
                 return redirect('/tasks_list/')
             else:
                 pass
-            tag = request.POST.get("tag")
-            if tag == "":
-                tag = f"#{date_function().strftime('%H%M%S')}"
-                messages.warning(request, f"Tag generated automatically: {tag}")
-
             name = request.POST.get("name")
             if name == "":
                 name = f"daily_{date_function().strftime('%H%M%S')}"
                 messages.warning(request, f"Daily task name generated automatically: {name}")
             category = request.POST.get("category")
+            if category == "" or category is None:
+                if "category_select" in request.POST:
+                    category = request.POST.get("category_select")
+                else:
+                    messages.warning(request, f"Yoy have to choose category")
+                    return redirect('/tasks_list/')
+            else:
+                pass
+
             description = request.POST.get("description")
             name = spaces_remover(name)
             category = spaces_remover(category)
-            category.title()
+            category = first_upper_letter(category)
             daily_task = DailyTask.objects.create(
-                tag=tag,
                 name=name,
                 category=category,
                 description=description,
                 user=request.user,
             )
             daily_task.save()
-            messages.success(request, f"New daily task '{tag}' has been added ")
+            messages.success(request, f"New daily task '{name}' has been added ")
 
             return redirect("/tasks_list/")
 
@@ -191,7 +212,15 @@ def tasks_list(request):
                 home_ = True
             name = request.POST.get("name")
             category = request.POST.get("category")
-            category = category.title()
+            if category == "" or category is None:
+                if "category_select" in request.POST:
+                    category = request.POST.get("category_select")
+                else:
+                    messages.warning(request, f"Yoy have to choose category")
+                    return redirect('/tasks_list/')
+            else:
+                pass
+            category = first_upper_letter(category)
             info = request.POST.get("info")
             description = request.POST.get("description")
             priority = request.POST.get("priority")
@@ -408,7 +437,7 @@ def delete_daily_task(request):
         task_id = request.POST["delete_daily_task"]
         daily_task = DailyTask.objects.get(id=task_id)
         daily_task.delete()
-        messages.warning(request, f"Daily task {daily_task.tag} has been deleted")
+        messages.warning(request, f"Daily task {daily_task.name} has been deleted")
         return redirect(f"/tasks_list/")
     return render(request, 'tasks_list.html', {})
 
