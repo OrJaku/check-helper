@@ -5,10 +5,16 @@
         <div class="text-primary ">
             <form action='/tasks_list/' method="POST"> {% csrf_token %}
                 <p>
-                    <input type="text" class="form-control" name="name" placeholder="Your task">
+                    <input type="text" class="form-control" name="name" placeholder="Your task*">
                 </p>
                 <p>
-                    <input type="text" class="form-control" name="category" placeholder="Category">
+                    <input type="text" class="form-control" name="category" placeholder="Category*">
+                        <select class="custom-select" name="category_select" id="inlineFormCustomSelect">
+                            <option selected>.. or choose category</option>
+                                {% for category  in unique_categories %}
+                                    <option value={{category}}>{{category}}</option>
+                                {% endfor %}
+                        </select>
                 </p>
                 <p>
                     <input type="text" class="form-control" name="info" placeholder="Additional info">

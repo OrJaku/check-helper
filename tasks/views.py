@@ -63,7 +63,7 @@ def daily_generator(current_date, user):
                 current_date,
                 current_date,
                 Brand.objects.get(id=2),
-                ).save()
+            ).save()
         else:
             pass
 
@@ -85,7 +85,7 @@ def new_task(
         start_data_task,
         end_data_task,
         brand=Brand.objects.get(id=1),
-        ):
+):
     name_task = spaces_remover(name_task)
     category_task = spaces_remover(category_task)
     task = Task.objects.create(
@@ -102,6 +102,28 @@ def new_task(
     return task
 
 
+def categories(user):
+    categories_list_tasks = Task.objects. \
+        values_list('category'). \
+        filter(user=user). \
+        distinct(). \
+        order_by('category')
+    categories_list_tasks = [cat[0] for cat in categories_list_tasks]
+
+    categories_list_daily_task = DailyTask.objects. \
+        values_list('category'). \
+        filter(user=user). \
+        distinct(). \
+        order_by('category')
+    categories_list_daily_task = [cat[0] for cat in categories_list_daily_task]
+
+    for cat in categories_list_daily_task:
+        if cat not in categories_list_tasks:
+            categories_list_tasks.append(cat)
+
+    return categories_list_tasks
+
+
 def home(request, *args, **kwargs):
     if request.user.is_authenticated:
         current_date = date_function().date()
@@ -109,6 +131,8 @@ def home(request, *args, **kwargs):
         tasks = Task.objects.all().filter(user=request.user).order_by("done")
         tasks_days_lower_then_three = []
         tasks_today = []
+        unique_categories = categories(request.user)
+
         for task in tasks:
             date_difference = task.end_data - current_date
             if 0 < date_difference.days <= 3:
@@ -120,6 +144,7 @@ def home(request, *args, **kwargs):
         context = {
             'tasks_days_lower_then_three': tasks_days_lower_then_three,
             'tasks_today': tasks_today,
+            'unique_categories': unique_categories,
         }
         return render(request, 'home.html', context)
     return render(request, 'home.html', {})
@@ -130,30 +155,8 @@ def tasks_list(request):
     sort = "end_data"
     sort_archive = "-end_data"
     current_date = date_function().date()
-
-    def categories():
-        categories_list_tasks = Task.objects.\
-            values_list('category').\
-            filter(user=request.user).\
-            distinct().\
-            order_by('category')
-        categories_list_tasks = [cat[0] for cat in categories_list_tasks]
-
-        categories_list_daily_task = DailyTask.objects.\
-            values_list('category').\
-            filter(user=request.user).\
-            distinct().\
-            order_by('category')
-        categories_list_daily_task = [cat[0] for cat in categories_list_daily_task]
-
-        for cat in categories_list_daily_task:
-            if cat not in categories_list_tasks:
-                categories_list_tasks.append(cat)
-
-        return categories_list_tasks
-
-    unique_categories = categories()
-    filtering_categories = categories()
+    unique_categories = categories(request.user)
+    filtering_categories = categories(request.user)
 
     daily_generator(current_date, request.user)
 
@@ -303,16 +306,16 @@ def tasks_list(request):
         return zipped_list
 
     daily_tasks_user_with_completed_days = zipping_daily(daily_tasks_user)
-    tasks_user = Task.objects.all().filter(user=request.user).\
-        filter(brand=1).\
+    tasks_user = Task.objects.all().filter(user=request.user). \
+        filter(brand=1). \
         filter(category__in=filtering_categories)
 
-    tasks_daily_user = Task.objects.all().\
-        filter(user=request.user).filter(brand=2).\
+    tasks_daily_user = Task.objects.all(). \
+        filter(user=request.user).filter(brand=2). \
         filter(category__in=filtering_categories)
 
-    tasks_user_archive = Task.objects.all().\
-        filter(user=request.user).\
+    tasks_user_archive = Task.objects.all(). \
+        filter(user=request.user). \
         filter(category__in=filtering_categories)
 
     tasks_user_with_date_difference = zipping(tasks_user.order_by(sort))
@@ -461,14 +464,14 @@ def searching_tasks(request):
                                               ]
                 return found_tasks
             tasks_name = Task.objects.filter(name__contains=search_sentences).filter(user=request.user)
-            tasks_description = Task.objects.filter(description__contains=search_sentences)\
-                .filter(user=request.user)\
+            tasks_description = Task.objects.filter(description__contains=search_sentences) \
+                .filter(user=request.user) \
                 .order_by("name")
-            tasks_info = Task.objects.filter(info__contains=search_sentences)\
-                .filter(user=request.user)\
+            tasks_info = Task.objects.filter(info__contains=search_sentences) \
+                .filter(user=request.user) \
                 .order_by("name")
-            tasks_category = Task.objects.filter(category__contains=search_sentences)\
-                .filter(user=request.user)\
+            tasks_category = Task.objects.filter(category__contains=search_sentences) \
+                .filter(user=request.user) \
                 .order_by("name")
             found_tasks = task_finder(tasks_name)
             found_tasks = task_finder(tasks_description)
