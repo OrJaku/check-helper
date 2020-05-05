@@ -85,7 +85,7 @@ def new_task(
         start_data_task,
         end_data_task,
         brand=Brand.objects.get(id=1),
-):
+        ):
     name_task = spaces_remover(name_task)
     category_task = spaces_remover(category_task)
     task = Task.objects.create(
@@ -98,7 +98,7 @@ def new_task(
         priority=priority_task,
         brand=brand,
         user=user,
-    )
+        )
     return task
 
 
@@ -145,7 +145,7 @@ def home(request, *args, **kwargs):
             'tasks_days_lower_then_three': tasks_days_lower_then_three,
             'tasks_today': tasks_today,
             'unique_categories': unique_categories,
-        }
+            }
         return render(request, 'home.html', context)
     return render(request, 'home.html', {})
 
@@ -157,7 +157,6 @@ def tasks_list(request):
     current_date = date_function().date()
     unique_categories = categories(request.user)
     filtering_categories = categories(request.user)
-
     daily_generator(current_date, request.user)
 
     if request.method == "POST":
@@ -193,7 +192,6 @@ def tasks_list(request):
             )
             daily_task.save()
             messages.success(request, f"New daily task '{name}' has been added ")
-
             return redirect("/tasks_list/")
 
         elif "sort" in request.POST:
@@ -405,7 +403,6 @@ def update_task(request, task_id):
         name = request.POST.get("name")
         name = spaces_remover(name)
         task.name = name
-
         category = request.POST.get("category")
         category = spaces_remover(category)
         task.category = category
@@ -414,7 +411,8 @@ def update_task(request, task_id):
         priority = request.POST.get("priority")
         if priority == "" or priority is None:
             task.priority = 1
-
+        else:
+            pass
         start_data = request.POST.get("start_data")
         if start_data == "" or start_data is None:
             pass
@@ -488,7 +486,6 @@ def searching_tasks(request):
             return redirect("/tasks_list/")
         else:
             pass
-
         found_elements = search_function(search)
         if not found_elements:
             messages.warning(request, "No result found..")
