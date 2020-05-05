@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block page %}
 <body id="">
-<div class="card" style="width: 40rem;">
+<div class="card border-primary mb-3" style="width: 40rem;">
 <h5><b>{{request.user}}'s</b> task</h5>
     <form method="POST" id="change_task_stat" action="/change_task_status/">{% csrf_token %}</form>
     <form method="POST" id="delete_task" action="/delete_task/">{% csrf_token %}</form>
@@ -37,7 +37,7 @@
 </p>
 <form method="POST" action="/tasks_list/{{task.id}}/update_task">{% csrf_token %}
 <table class="table">
-  <thead class="thead-dark">
+  <thead class="">
     <tr>
       <th scope="col">
         {% if task.done == True %}
