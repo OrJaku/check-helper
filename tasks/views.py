@@ -215,12 +215,15 @@ def tasks_list(request):
                 home_ = True
             name = request.POST.get("name")
             category = request.POST.get("category")
-            if category == "" or category is None:
-                if "category_select" in request.POST:
-                    category = request.POST.get("category_select")
+            if category == "" or category is None or name == "" or name is None:
+                if request.POST.get("category_select") == ".. or choose category":
+                    messages.warning(request, f"Yoy have to add name andgit  choose category")
+                    if home_ is False:
+                        return redirect('/tasks_list/')
+                    else:
+                        return redirect('/')
                 else:
-                    messages.warning(request, f"Yoy have to choose category")
-                    return redirect('/tasks_list/')
+                    category = request.POST.get("category_select")
             else:
                 pass
             category = first_upper_letter(category)
