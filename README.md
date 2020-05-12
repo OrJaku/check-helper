@@ -9,5 +9,4 @@
 - Task status
 - Task start-end date
 
-
-![](https://i.ibb.co/0yq6t5s/Peek-2020-04-17-21-42.gif)
+![](https://i.ibb.co/Jrxch1c/Peek-2020-05-12-18-08.gif)
