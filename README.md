@@ -9,5 +9,4 @@
 - Task status
 - Task start-end date
 
- Link: orjaku.pythonanywhere.com
-![](https://i.ibb.co/XkR13b4/check-helper.gif)
+![](https://i.ibb.co/Jrxch1c/Peek-2020-05-12-18-08.gif)
