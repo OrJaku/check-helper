@@ -2,7 +2,7 @@
 {% block page %}
  <body id="home">
     <br>
-    <h3> This is your everyday-life application</h3><br>
+    <h3> This is <img src="https://i.ibb.co/hVnrnKg/check-1769866-640.png" width="30" height="30" alt=""> <b> checked</b> application</h3><br>
     {%if not request.user.is_authenticated%}
         <h4> You have to <a  href="/user_login">Login</a> to get access to your data</h4>
     {%else%}

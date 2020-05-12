@@ -505,7 +505,7 @@ def user_login(request):
             return redirect('/')
         else:
             messages.error(request, 'Invalid login or password')
-        return render(request, 'home.html', {})
+        return render(request, 'user_login.html', {})
     else:
         return render(request, 'user_login.html', {})
 

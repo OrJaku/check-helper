@@ -8,8 +8,10 @@ body {
   margin-top: 0px;
   max-width: 600px;
   height: 320px;
-  border: 1px solid #9C9C9C;
-  background-color: #e6f0ff;
+  border: 2px solid #9C9C9C;
+  background-color: #ebfaeb;
+  border-color: #33cc33;
+  border-radius: 5px;
 }
 #login .container #login-row #login-column #login-box #login-form {
   padding: 20px;
