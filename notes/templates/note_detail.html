@@ -1,61 +1,63 @@
 {% extends "base.html" %}
 {% block page %}
-<body id="">
-<div class="card border-secondary mb-3" style="width: 40rem;" >
-    <h5><b>{{request.user}}'s</b> note</h5>
-    <div align="right">
-        <button type="button" class="btn btn-secondary btn-sm"  data-toggle="modal" data-target="#staticBackdrop">
-            Delete note
-        </button>
-    </div>
-    <form method="POST" id="delete_note" action="/delete_note/">{% csrf_token %}</form>
-    <p>
-    <div class="modal fade" id="staticBackdrop" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="staticBackdropLabel">Delete note: <i>{{note.name}} [{{note.id}}]</i></h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    Are you sure you want to delete this note?
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-dark" data-dismiss="modal">No</button>
-                    <button type="submit" class="btn btn-secondary" name="delete_note" form="delete_note" value={{note.id}}>Yes, delete note</button>
+<body>
+    <div class="d-flex justify-content-center">
+        <div class="card border-secondary" style="width: 50rem;" >
+            <h5><b>{{request.user}}'s</b> note</h5>
+            <div align="right">
+                <button type="button" class="btn btn-secondary btn-sm"  data-toggle="modal" data-target="#staticBackdrop">
+                    Delete note
+                </button>
+            </div>
+            <form method="POST" id="delete_note" action="/delete_note/">{% csrf_token %}</form>
+            <p>
+            <div class="modal fade" id="staticBackdrop" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="staticBackdropLabel">Delete note: <i>{{note.name}} [{{note.id}}]</i></h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            Are you sure you want to delete this note?
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-dark" data-dismiss="modal">No</button>
+                            <button type="submit" class="btn btn-secondary" name="delete_note" form="delete_note" value={{note.id}}>Yes, delete note</button>
+                        </div>
+                    </div>
                 </div>
             </div>
+
+            </p>
+            <form method="POST" action="/notes_list/{{note.id}}/update_note/">{% csrf_token %}
+                <table class="table">
+                    <tbody>
+                    <tr>
+                        <th scope="row">
+                            <i>ID: {{ note.id }}</i> <small class="text-muted"> {{ note.date }} - {{ note.time }}</small>
+                        </th>
+                    </tr>
+                    <tr>
+                        <th scope="row"><b>Title: </b>
+                            <textarea class="form-control" rows="1" cols="1"  name='name' >{{ note.name }}</textarea>
+                        </th>
+                    </tr>
+                    <tr>
+                        <th scope="row"><b>Tag:</b>
+                            <textarea  class="form-control" rows="1" cols="1"  name='tag' >{{ note.tag }}</textarea></th>
+                    </tr>
+                    <tr>
+                        <th scope="row"><b>Note:</b>
+                            <textarea  class="form-control" rows="6" cols="1"  name='description' >{{ note.description }}</textarea></th>
+                    </tr>
+                    </tbody>
+                </table>
+                <center><button type="submit" class="btn btn-secondary btn-lg btn-block">Update note</button><br></center>
+            </form>
         </div>
     </div>
-
-    </p>
-    <form method="POST" action="/notes_list/{{note.id}}/update_note/">{% csrf_token %}
-        <table class="table">
-            <tbody>
-            <tr>
-                <th scope="row">
-                    <i>ID: {{ note.id }}</i> <small class="text-muted"> {{ note.date }} - {{ note.time }}</small>
-                </th>
-            </tr>
-            <tr>
-                <th scope="row"><b>Title: </b>
-                    <textarea class="form-control" rows="1" cols="1"  name='name' >{{ note.name }}</textarea>
-                </th>
-            </tr>
-            <tr>
-                <th scope="row"><b>Tag:</b>
-                    <textarea  class="form-control" rows="1" cols="1"  name='tag' >{{ note.tag }}</textarea></th>
-            </tr>
-            <tr>
-                <th scope="row"><b>Note:</b>
-                    <textarea  class="form-control" rows="6" cols="1"  name='description' >{{ note.description }}</textarea></th>
-            </tr>
-            </tbody>
-        </table>
-        <center><button type="submit" class="btn btn-secondary btn-lg btn-block">Update note</button><br></center>
-    </form>
-</div>
 </body>
 {% endblock %}

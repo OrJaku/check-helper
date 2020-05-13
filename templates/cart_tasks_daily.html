@@ -1,4 +1,4 @@
-<div class="card" style="max-width: 18rem; min-width: 15rem;">
+<div class="card" style="min-width: 15rem;">
 <div class="card-header bg-primary text-white" align="center">Today</div>
       <p class="card-text"></p>
 
@@ -8,7 +8,7 @@
   </div>
 {% else %}
   {% for task in tasks_today %}
-    <div class="card text-primary bg-border-primary mb-3" style="max-width: 25rem;">
+    <div class="card text-primary bg-border-primary mb-3">
       <div class="card-header">
           {% if task.done == True  %}
             <span class="badge badge-pill badge-success text-success"> </span>

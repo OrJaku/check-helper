@@ -1,4 +1,4 @@
-<div class="card" style="max-width: 18rem; min-width: 15rem;">
+<div class="card" style="min-width: 15rem;">
   <div class="card-header bg-primary text-white" align="center">You've got three days or less</div>
       <p class="card-text"></p>
   {% if not tasks_days_lower_then_three %}
@@ -7,7 +7,7 @@
     </div>
   {% else %}
   {% for task in tasks_days_lower_then_three %}
-      <div class="card text-primary bg-border-primary mb-1" style="max-width: 18rem;">
+      <div class="card text-primary bg-border-primary mb-1">
 
         <div class="card-header">
           {% if task.done == True %}
