@@ -44,13 +44,13 @@ def notes_list(request, *args, **kwargs):
         days_str.append(str(i['date']))
         days_date.append(i['date'])
     date = zip(days_str, days_date)
-
     notes = Notes.objects.all().filter(user=request.user).order_by('-time')
+
+    # Searching
     founds_list = []
     found_by_name = request.session.get('found_by_name')
     found_by_description = request.session.get('found_by_description')
     found_by_tag = request.session.get('found_by_tag')
-
     try:
         del request.session['found_by_name']
     except KeyError:
@@ -71,6 +71,7 @@ def notes_list(request, *args, **kwargs):
 
     unique_tags = Notes.objects.values_list('tag').filter(user=request.user).distinct()
     unique_tags = [tag[0] for tag in unique_tags]
+
     context = {
         "notes": notes,
         "date": date,
@@ -93,7 +94,6 @@ def delete_note(request):
 
 
 def tag_list(request, tag):
-    print(tag)
     notes_by_tag = Notes.objects.all().filter(tag=tag)
     context = {
         "tag": tag,
@@ -136,18 +136,33 @@ def searching_notes(request):
             notes_name = Notes.objects.filter(name__contains=search_sentences).filter(user=request.user)
             found_in_name = {}
             for note in notes_name:
-                found_in_name[note.name] = [note.description, note.time, str(note.date), note.tag, note.id]
-
+                found_in_name[note.name] = [
+                                            note.description,
+                                            note.time,
+                                            str(note.date),
+                                            note.tag,
+                                            note.id,
+                                            ]
             notes_description = Notes.objects.filter(description__contains=search_sentences).filter(user=request.user)
             found_in_description = {}
             for note in notes_description:
-                found_in_description[note.name] = [note.description, note.time, str(note.date), note.tag, note.id]
-
+                found_in_description[note.name] = [
+                                                    note.description,
+                                                    note.time,
+                                                    str(note.date),
+                                                    note.tag,
+                                                    note.id,
+                                                    ]
             notes_tag = Notes.objects.filter(tag__contains=search_sentences).filter(user=request.user)
             found_in_tag = {}
             for note in notes_tag:
-                found_in_tag[note.name] = [note.description, note.time, str(note.date), note.tag, note.id]
-
+                found_in_tag[note.name] = [
+                                            note.description,
+                                            note.time,
+                                            str(note.date),
+                                            note.tag,
+                                            note.id,
+                                            ]
             return found_in_name, found_in_description, found_in_tag
         search = request.POST["search"]
         if search == "":

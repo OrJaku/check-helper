@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% block page %}
 <body>
+<h4>Tag: <b class="text-secondary">{{tag}}</b></h4>
     {% for note in notes_by_tag%}
             <div class="row">
                 {% include 'note_cart.html' %}
