@@ -73,6 +73,13 @@
               <th scope="row"><b>Comment: </b>
                   <textarea  class="form-control" rows="1" cols="1"  name='description' >{{task.description}}</textarea></th>
             </tr>
+            </tr>
+            <tr>
+                <th scope="row"><b>Share: {{task.share}}</b>
+                    <br>
+                    <input class="form-control"  type="text" name='share' placeholder={{task.share.id}}>
+                </th>
+            </tr>
             {%if task.brand.id == 1 %}
             <tr>
               <th scope="row"><b>Priority: {{task.priority}}</b>

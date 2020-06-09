@@ -408,6 +408,12 @@ def update_task(request, task_id):
         task.category = category
         task.info = request.POST.get("info")
         task.description = request.POST.get("description")
+        share = request.POST.get("share")
+        if share == "" or share is None:
+            print(task.share)
+            task.share.username = 'kuba'
+            print(task.share.username)
+            print(task.share)
         priority = request.POST.get("priority")
         if priority == "" or priority is None:
             task.priority = 1
@@ -425,7 +431,9 @@ def update_task(request, task_id):
             pass
         else:
             task.end_data = end_data
+        print(task.share)
         task.save()
+        print(task.share)
         messages.info(request, f"Task {task.name} updated")
         return redirect(f'/tasks_list/{task_id}')
     return render(request, 'tasks_list.html', {})

@@ -21,6 +21,7 @@ class Task(models.Model):
     priority = models.IntegerField(default=1)
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE, related_name='brand')
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user')
+    share = models.ForeignKey(User, on_delete=models.CASCADE, related_name='share_user', null=True)
 
     def __str__(self):
         return 'Task: %s' % self.name
