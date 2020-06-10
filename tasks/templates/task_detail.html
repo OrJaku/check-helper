@@ -75,9 +75,14 @@
             </tr>
             </tr>
             <tr>
-                <th scope="row"><b>Share: {{task.share}}</b>
+                <th scope="row"><b>Share:
+                    {% if task.share == None %}
+                    {% else %}
+                        {{task.share}}
+                    {% endif %}
+                    <small class="text-muted"> To delete user from sharing list put "No" below</small></b>
                     <br>
-                    <input class="form-control"  type="text" name='share' placeholder={{task.share.id}}>
+                    <input class="form-control"  type="text" name='share' placeholder={{task.share}}>
                 </th>
             </tr>
             {%if task.brand.id == 1 %}

@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
+from django.contrib.auth.models import User
 from .models import Task, Brand, DailyTask
 import datetime
 import pytz
@@ -311,10 +312,12 @@ def tasks_list(request):
         filter(brand=1). \
         filter(category__in=filtering_categories)
 
+    tasks_user_share = Task.objects.all().filter(share=request.user)
+    print("Task sharing: ", tasks_user_share)
+
     tasks_daily_user = Task.objects.all(). \
         filter(user=request.user).filter(brand=2). \
         filter(category__in=filtering_categories)
-
     tasks_user_archive = Task.objects.all(). \
         filter(user=request.user). \
         filter(category__in=filtering_categories)
@@ -410,15 +413,19 @@ def update_task(request, task_id):
         task.description = request.POST.get("description")
         share = request.POST.get("share")
         if share == "" or share is None:
-            print(task.share)
-            task.share.username = 'kuba'
-            print(task.share.username)
-            print(task.share)
+            pass
+        elif share == "No":
+            task.share = None
+        else:
+            try:
+                task.share = User.objects.get(username=share)
+            except User.DoesNotExist:
+                messages.warning(request, f"User {share} dose not exist")
         priority = request.POST.get("priority")
         if priority == "" or priority is None:
             task.priority = 1
         else:
-            pass
+            task.priority = priority
         start_data = request.POST.get("start_data")
         if start_data == "" or start_data is None:
             pass
@@ -426,15 +433,12 @@ def update_task(request, task_id):
             task.end_data = start_data
 
         end_data = request.POST.get("end_data")
-        print(end_data)
         if end_data == "" or end_data is None:
             pass
         else:
             task.end_data = end_data
-        print(task.share)
         task.save()
-        print(task.share)
-        messages.info(request, f"Task {task.name} updated")
+        messages.info(request, f"Task '{task.name}' updated")
         return redirect(f'/tasks_list/{task_id}')
     return render(request, 'tasks_list.html', {})
 
