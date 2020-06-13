@@ -308,12 +308,12 @@ def tasks_list(request):
         return zipped_list
 
     daily_tasks_user_with_completed_days = zipping_daily(daily_tasks_user)
+
+    tasks_user_share = Task.objects.all().filter(share=request.user)
     tasks_user = Task.objects.all().filter(user=request.user). \
         filter(brand=1). \
         filter(category__in=filtering_categories)
-
-    tasks_user_share = Task.objects.all().filter(share=request.user)
-    print("Task sharing: ", tasks_user_share)
+    tasks_user = tasks_user_share | tasks_user
 
     tasks_daily_user = Task.objects.all(). \
         filter(user=request.user).filter(brand=2). \
@@ -321,6 +321,7 @@ def tasks_list(request):
     tasks_user_archive = Task.objects.all(). \
         filter(user=request.user). \
         filter(category__in=filtering_categories)
+    tasks_user_archive = tasks_user_share | tasks_user_archive
 
     tasks_user_with_date_difference = zipping(tasks_user.order_by(sort))
     tasks_user_archive_with_date_difference = zipping(tasks_user_archive.order_by(sort_archive))
