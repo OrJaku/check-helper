@@ -146,6 +146,11 @@
             <tr class="">
         {%endif%}
 
+        {%if task.share %}
+            <tr class="table-warning">
+        {%else%}
+            <tr class="">
+        {%endif%}
             <th scope="row"></th>
             <td><b><a href="/tasks_list/{{task.id}}">{{task.name}} </a></b>
             </td>
