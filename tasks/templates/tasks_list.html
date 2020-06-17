@@ -157,8 +157,13 @@
             <tr class="">
         {%endif%}
             <th scope="row"></th>
-            <td><b><a href="/tasks_list/{{task.id}}">{{task.name}} </a></b>
-            </td>
+                <td>
+                    {% if request.user == task.share %}
+                        <b>{{task.name}} </b>
+                    {% else %}
+                        <b><a href="/tasks_list/{{task.id}}">{{task.name}}</a></b>
+                    {% endif %}
+                </td>
             <td>{{task.category}}</td>
             <td>{{task.info}}</td>
             <td>{{task.description}}</td>
@@ -169,7 +174,15 @@
                 {%else%}
                     <b>({{diff}})</b>
                 {%endif%}
-            <td><font color="#f59542"><i>{{task.share.username}}</i></font></td>
+            <td>
+                <center>
+                    {% if request.user == task.share %}
+                        <font color="#ffb84d"> from <i><b>{{task.user.username}}</b></i></font>
+                    {% else %}
+                        <font color="#f59542"><i><b>{{task.share.username}}</b></i></font>
+                    {% endif %}
+                </center>
+            </td>
             <td>
                 <center>
                     <form method="POST" action="/change_task_status/">{% csrf_token %}
