@@ -84,6 +84,11 @@
         </th>
         <th scope="col">
             <form method="POST" action=".">{% csrf_token %}
+                <button name="sort" type="submit"  value="share" class="btn btn-active btn-sm">Shared</button>
+            </form>
+        </th>
+        <th scope="col">
+            <form method="POST" action=".">{% csrf_token %}
                  <button name="sort" type="submit"  value="done" class="btn btn-active btn-sm">Status</button>
             </form>
         </th>
@@ -116,7 +121,7 @@
             <td><center><font color="#3366ff">-</font></center></td>
             <td><font color="#3366ff">-</font></td>
             <td><font color="#3366ff"><i>(Daily task)</i></font></td>
-
+            <td><center><font color="#3366ff">-</font></center></td>
             <td>
                 <center>
                     <form method="POST" action="/change_task_status/">{% csrf_token %}
@@ -164,6 +169,7 @@
                 {%else%}
                     <b>({{diff}})</b>
                 {%endif%}
+            <td><font color="#f59542"><i>{{task.share.username}}</i></font></td>
             <td>
                 <center>
                     <form method="POST" action="/change_task_status/">{% csrf_token %}
