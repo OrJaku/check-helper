@@ -27,17 +27,21 @@
               <label>Comment</label>
               <input type="text" class="form-control" name="description" placeholder="Comment..">
           </div>
-          <div class="col col-md-3">
-              <label  >First day <small class="text-muted">(default = current date)</small></label>
+          <div class="col col-md-2">
+              <label  >First day <small class="text-muted">(def = current date)</small></label>
                     <input type="date" class="form-control" id="start" name="start_data">
           </div>
-          <div class="col col-md-3" >
-              <label for="end">Last day <small class="text-muted">(default = First day + delta)</small></label>
+          <div class="col col-md-2" >
+              <label for="end">Last day <small class="text-muted">(def = fd + delta)</small></label>
                     <input type="date" class="form-control" id="end" name="end_data">
           </div>
-              <div class="col col-md-1">
-                  <label for="delta">Days: </label>
-                    <input type="text" class="form-control" id="delta" name="delta" placeholder="10">
+          <div class="col col-md-2" >
+              <label for="end">Share</label>
+              <input type="text" class="form-control" id="share" name="share" placeholder="Name of user">
+          </div>
+          <div class="col col-md-1">
+              <label for="delta">Days: </label>
+              <input type="text" class="form-control" id="delta" name="delta" placeholder="10">
           </div>
               <div class="col col-md-1">
                   <label>Priority: <small class="text-muted"></small></label>

@@ -85,6 +85,7 @@ def new_task(
         user,
         start_data_task,
         end_data_task,
+        share,
         brand=Brand.objects.get(id=1),
         ):
     name_task = spaces_remover(name_task)
@@ -99,6 +100,7 @@ def new_task(
         priority=priority_task,
         brand=brand,
         user=user,
+        share=share,
         )
     return task
 
@@ -216,7 +218,7 @@ def tasks_list(request):
             category = request.POST.get("category")
             if category == "" or category is None or name == "" or name is None:
                 if request.POST.get("category_select") == ".. or choose category":
-                    messages.warning(request, f"Yoy have to add name andgit  choose category")
+                    messages.warning(request, f"Yoy have to add name and choose category")
                     if home_ is False:
                         return redirect('/tasks_list/')
                     else:
@@ -253,6 +255,22 @@ def tasks_list(request):
                 priority = 1
             else:
                 pass
+            user_list = User.objects.all().distinct().values_list("username")
+            user_list = [user[0] for user in user_list]
+            share = request.POST.get("share")
+            if share == "":
+                share = None
+            elif share not in user_list:
+                messages.warning(request, f"Shared user '{share}' does not exist")
+                return redirect("/tasks_list/")
+            else:
+                pass
+            try:
+                share = User.objects.get(username=share)
+            except User.DoesNotExist:
+                pass
+
+
             if name == "" and category == "" and info == "" and description == "":
                 messages.warning(request, f"You did not fill task data")
                 return redirect("/tasks_list/")
@@ -261,7 +279,7 @@ def tasks_list(request):
             else:
                 pass
 
-            new_task(name, category, info, description, priority, request.user, start_data, end_data).save()
+            new_task(name, category, info, description, priority, request.user, start_data, end_data, share).save()
             messages.success(request, f"New task '{name}' has been added ")
             if home_ is False:
                 return redirect('/tasks_list/')
