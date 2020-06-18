@@ -54,6 +54,7 @@ def daily_generator(current_date, user):
                 name = "Empty"
             else:
                 name = daily_task.name
+            share = None
             new_task(
                 name,
                 daily_task.category,
@@ -63,6 +64,7 @@ def daily_generator(current_date, user):
                 user,
                 current_date,
                 current_date,
+                share,
                 Brand.objects.get(id=2),
             ).save()
         else:
