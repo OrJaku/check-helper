@@ -103,7 +103,7 @@
 
       <tr class="table-success">
         {%else%}
-            <tr style="background-color:  #e6f5ff;">
+            <tr style="background-color:  #f2faff;">
         {%endif%}
             <th scope="row"></th>
             <td><b>
@@ -144,17 +144,13 @@
 <!--#### Standard Tasks ####-->
 
   {%for task, diff in tasks%}
-    {%if diff >= 0 or task.done == False %}
-        {%if task.done == True %}
+     {%if diff >= 0 or task.done == False %}
+        {%if task.done == True and task.share %}
+            <tr class="table-success" style="border-style: solid; border-width: 2px; border-color: #a6d8f7">
+        {%elif task.done == True%}
             <tr class="table-success">
-        {%else%}
-            <tr class="">
-        {%endif%}
-
-        {%if task.share %}
-            <tr class="table-warning">
-        {%else%}
-            <tr class="">
+        {%elif task.share %}
+            <tr style="border-style: solid; border-width: 2px; border-color: #a6d8f7">
         {%endif%}
             <th scope="row"></th>
                 <td>
