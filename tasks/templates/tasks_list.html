@@ -4,7 +4,6 @@
 <body>
     <h5><b>{{request.user}}'s</b> tasks</h5>
     <nav class="navbar navbar-light bg-light justify-content-between">
-        <div class="btn-group dropright">
             <div class="column">
             <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseNewTask" aria-expanded="false" aria-controls="collapseNewTask">
               New task +
@@ -13,17 +12,29 @@
             <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseDailyTasks" aria-expanded="false" aria-controls="collapseDailyTasks">
               Daily tasks
             </button>
-
-            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownTag" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Categories
-            </button>
-                    <div class="dropdown-menu" aria-labelledby="dropdownTag">
-                        {% for category in unique_categories %}
-                            <form method="POST" id="cat_list" action="/tasks_list/">{% csrf_token %}</form>
-                                <button class="dropdown-item" form="cat_list" name="category" value={{category}}>{{category}}</button>
-                        {% endfor %}
-                                <button class="dropdown-item" form="cat_list" name="category" value="All">All</button>
-                    </div>
+            <div class="btn-group dropright">
+                <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownTag" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Categories
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownTag">
+                    {% for category in unique_categories %}
+                        <form method="POST" id="cat_list" action="/tasks_list/">{% csrf_token %}</form>
+                            <button class="dropdown-item" form="cat_list" name="category" value={{category}}>{{category}}</button>
+                    {% endfor %}
+                            <button class="dropdown-item" form="cat_list" name="category" value="All">All</button>
+                </div>
+            </div>
+                <div class="btn-group dropright">
+                    <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownTagType" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Type
+                    </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownTagType">
+                            <form method="POST" id="type_list" action="/tasks_list/">{% csrf_token %}</form>
+                            <button class="dropdown-item" form="type_list" name="type" value="standard" >Standard Task</button>
+                            <button class="dropdown-item" form="type_list" name="type" value="daily" >Daily Task</button>
+                            <button class="dropdown-item" form="type_list" name="type" value="share" >Shared</button>
+                            <button class="dropdown-item" form="type_list" name="type" value="All">All</button>
+                        </div>
                 </div>
             </div>
         <form class="form-inline" method="POST" action="/searching_tasks/">
