@@ -165,6 +165,10 @@ def tasks_list(request):
     daily_generator(current_date, request.user)
     filtering_types_brand = [1, 2]
 
+    users_list_id = User.objects.values_list('id').distinct()
+    users_list_id = [user[0] for user in users_list_id]
+    print("users_list", users_list_id)
+    share_attribute = False
     if request.method == "POST":
         if "daily" in request.POST:
             if len(DailyTask.objects.all().filter(user=request.user)) >= 8:
@@ -303,7 +307,7 @@ def tasks_list(request):
                 elif task_type[0] == "daily":
                     filtering_types_brand = '2'
                 elif task_type[0] == "share":
-                    pass
+                    share_attribute = True
             print("task_type", task_type)
         else:
             return render(request, 'tasks_list.html', {})
@@ -341,17 +345,24 @@ def tasks_list(request):
     daily_tasks_user_with_completed_days = zipping_daily(daily_tasks_user)
 
     tasks_user_share = Task.objects.all().filter(share=request.user)
-
-    tasks_user = Task.objects.all().filter(user=request.user). \
-        filter(brand=1). \
-        filter(category__in=filtering_categories). \
-        filter(brand__in=filtering_types_brand)
+    if share_attribute:
+        tasks_user = Task.objects.all().filter(user=request.user). \
+            filter(brand=1). \
+            filter(category__in=filtering_categories). \
+            filter(brand__in=filtering_types_brand). \
+            filter(share__in=users_list_id)
+    else:
+        tasks_user = Task.objects.all().filter(user=request.user). \
+            filter(brand=1). \
+            filter(category__in=filtering_categories). \
+            filter(brand__in=filtering_types_brand)
 
     tasks_user = tasks_user_share | tasks_user
 
     tasks_daily_user = Task.objects.all(). \
         filter(user=request.user).filter(brand=2). \
-        filter(category__in=filtering_categories)
+        filter(category__in=filtering_categories). \
+        filter(brand__in=filtering_types_brand)
 
     tasks_user_archive = Task.objects.all(). \
         filter(user=request.user). \
