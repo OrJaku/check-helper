@@ -351,18 +351,25 @@ def tasks_list(request):
             filter(category__in=filtering_categories). \
             filter(brand__in=filtering_types_brand). \
             filter(share__in=users_list_id)
+
+        tasks_daily_user = Task.objects.all(). \
+            filter(user=request.user).filter(brand=2). \
+            filter(category__in=filtering_categories). \
+            filter(brand__in=[1])
     else:
         tasks_user = Task.objects.all().filter(user=request.user). \
             filter(brand=1). \
             filter(category__in=filtering_categories). \
             filter(brand__in=filtering_types_brand)
 
+        tasks_daily_user = Task.objects.all(). \
+            filter(user=request.user).filter(brand=2). \
+            filter(category__in=filtering_categories). \
+            filter(brand__in=filtering_types_brand)
+
     tasks_user = tasks_user_share | tasks_user
 
-    tasks_daily_user = Task.objects.all(). \
-        filter(user=request.user).filter(brand=2). \
-        filter(category__in=filtering_categories). \
-        filter(brand__in=filtering_types_brand)
+
 
     tasks_user_archive = Task.objects.all(). \
         filter(user=request.user). \
