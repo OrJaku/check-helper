@@ -9,6 +9,11 @@ import pytz
 from datetime import timedelta
 
 
+def version():
+    app_version = "2.3"
+    return app_version
+
+
 def date_function():
     time = datetime.datetime.today()
     tz = pytz.timezone('Europe/Warsaw')
@@ -580,3 +585,8 @@ def user_logout(request):
     logout(request)
     messages.info(request, 'You are logged out')
     return redirect('/')
+
+
+def about(request):
+    context = {"version": version()}
+    return render(request, 'about_page.html', context)
