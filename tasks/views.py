@@ -172,7 +172,6 @@ def tasks_list(request):
 
     users_list_id = User.objects.values_list('id').distinct()
     users_list_id = [user[0] for user in users_list_id]
-    print("users_list", users_list_id)
     share_attribute = False
     if request.method == "POST":
         if "daily" in request.POST:
@@ -313,7 +312,6 @@ def tasks_list(request):
                     filtering_types_brand = '2'
                 elif task_type[0] == "share":
                     share_attribute = True
-            print("task_type", task_type)
         else:
             return render(request, 'tasks_list.html', {})
 
@@ -498,7 +496,7 @@ def update_task(request, task_id):
             task.end_data = end_data
         task.save()
         messages.info(request, f"Task '{task.name}' updated")
-        return redirect(f'/tasks_list/{task_id}')
+        return redirect('/tasks_list/')
     return render(request, 'tasks_list.html', {})
 
 
