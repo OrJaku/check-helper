@@ -7,26 +7,50 @@
     {% for num, founds in founds_list_enumerate %}
         {% include 'found_notes_elements.html' %}
     {% endfor %}
-    {%for day_str, day_date , month_data in date%}
-    {{current_date}}
-    <p>
-    <button class="btn btn-secondary btn-lg btn-block" type="button" data-toggle="collapse" data-target="#coll{{day_str}}" aria-expanded="false" aria-controls="coll{{day_str}}">
-              {{ day_date }} {{month_data}}
-    </button>
-    </p>
-    <div class="collapse" id="coll{{day_str}}">
-        <div class="card card-body">
-            <div class="row">
-            {% for note in notes %}
-                {% if note.date.month == month_data %}
-                    {% include 'note_cart.html' %}
-                {% endif %}
-            {% endfor %}
-            </div>
-        </div>
-    </div>
 
+    {%for day_str, day_date , month_data in date%}
+        {% if current_date.month == month_data %}
+            <p>
+                <button class="btn btn-secondary btn-lg btn-block" type="button" data-toggle="collapse" data-target="#coll_day{{day_str}}" aria-expanded="false" aria-controls="coll_day{{day_str}}">
+                          {{ day_date }}
+                </button>
+            </p>
+            <div class="collapse" id="coll_day{{day_str}}">
+                <div class="card card-body">
+                    <div class="row">
+                    {% for note in notes %}
+                        {% if note.date == day_date %}
+                            {% include 'note_cart.html' %}
+                        {% endif %}
+                    {% endfor %}
+                    </div>
+                </div>
+            </div>
+        {% endif %}
     {% endfor %}
+
+    {%for month, month_name in date_month%}
+        {% if current_date.month > month %}
+            <p>
+                <button class="btn btn-secondary btn-lg btn-block" type="button" data-toggle="collapse" data-target="#coll{{month}}" aria-expanded="false" aria-controls="coll{{month}}">
+                    {{month_name}}
+                </button>
+            </p>
+            <div class="collapse" id="coll{{month}}">
+                <div class="card card-body">
+                    <div class="row">
+                        {% for note in notes %}
+                            {% if note.date.month == month %}
+                                {% include 'note_cart.html' %}
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    {% endfor %}
+
+
 
 </body>
 {% endblock %}

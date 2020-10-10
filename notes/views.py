@@ -17,6 +17,7 @@ def date_function():
 def notes_list(request, *args, **kwargs):
     current_date = date_function()
     auto_name = current_date.strftime('%H:%M:%S')
+    current_month = current_date.strftime('%M')
     if request.method == "POST":
         name = request.POST.get("name")
         if name == "" or name == " " or name == "  ":
@@ -41,25 +42,36 @@ def notes_list(request, *args, **kwargs):
     days_str = []
     days_date = []
     month_date = []
-    months_list = ["Unknown",
-              "January",
-              "Febuary",
-              "March",
-              "April",
-              "May",
-              "June",
-              "July",
-              "August",
-              "September",
-              "October",
-              "November",
-              "December"]
+    existing_month_list = []
+    existing_month_name_list = []
+    months_list = [
+                    "Unknown",
+                    "January",
+                    "Febuary",
+                    "March",
+                    "April",
+                    "May",
+                    "June",
+                    "July",
+                    "August",
+                    "September",
+                    "October",
+                    "November",
+                    "December",
+                    ]
     for i in date_db:
         days_str.append(str(i['date']))
         days_date.append(i['date'])
         month_date.append(i['date'].month)
+        if i['date'].month in existing_month_list:
+            pass
+        else:
+            existing_month_list.append(i['date'].month)
+            existing_month_name_list.append(months_list[i['date'].month])
 
     date = zip(days_str, days_date, month_date)
+    date_month = zip(existing_month_list, existing_month_name_list)
+
     notes = Notes.objects.all().filter(user=request.user).order_by('-time')
 
     # Searching
@@ -95,6 +107,7 @@ def notes_list(request, *args, **kwargs):
         "auto_name": auto_name,
         "unique_tags": unique_tags,
         "current_date": current_date,
+        "date_month": date_month,
     }
     return render(request, 'notes_list.html', context)
 
