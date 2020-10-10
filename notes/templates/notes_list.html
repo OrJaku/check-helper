@@ -7,18 +7,18 @@
     {% for num, founds in founds_list_enumerate %}
         {% include 'found_notes_elements.html' %}
     {% endfor %}
-
-    {%for day_str, day_date in date%}
+    {%for day_str, day_date , month_data in date%}
+    {{current_date}}
     <p>
     <button class="btn btn-secondary btn-lg btn-block" type="button" data-toggle="collapse" data-target="#coll{{day_str}}" aria-expanded="false" aria-controls="coll{{day_str}}">
-              {{ day_date }}
+              {{ day_date }} {{month_data}}
     </button>
     </p>
     <div class="collapse" id="coll{{day_str}}">
         <div class="card card-body">
             <div class="row">
             {% for note in notes %}
-                {% if note.date == day_date %}
+                {% if note.date.month == month_data %}
                     {% include 'note_cart.html' %}
                 {% endif %}
             {% endfor %}

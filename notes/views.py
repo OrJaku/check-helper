@@ -37,13 +37,29 @@ def notes_list(request, *args, **kwargs):
             )
         new_note.save()
         return redirect("/notes_list/")
-    date = Notes.objects.all().filter(user=request.user).values('date').distinct().order_by('-date')
+    date_db = Notes.objects.all().filter(user=request.user).values('date').distinct().order_by('-date')
     days_str = []
     days_date = []
-    for i in date:
+    month_date = []
+    months_list = ["Unknown",
+              "January",
+              "Febuary",
+              "March",
+              "April",
+              "May",
+              "June",
+              "July",
+              "August",
+              "September",
+              "October",
+              "November",
+              "December"]
+    for i in date_db:
         days_str.append(str(i['date']))
         days_date.append(i['date'])
-    date = zip(days_str, days_date)
+        month_date.append(i['date'].month)
+
+    date = zip(days_str, days_date, month_date)
     notes = Notes.objects.all().filter(user=request.user).order_by('-time')
 
     # Searching
@@ -78,6 +94,7 @@ def notes_list(request, *args, **kwargs):
         "founds_list_enumerate": founds_list_enumerate,
         "auto_name": auto_name,
         "unique_tags": unique_tags,
+        "current_date": current_date,
     }
     return render(request, 'notes_list.html', context)
 
