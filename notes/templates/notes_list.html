@@ -7,6 +7,7 @@
     {% for num, founds in founds_list_enumerate %}
         {% include 'found_notes_elements.html' %}
     {% endfor %}
+    <p><button type="button" class="btn btn-outline-dark btn-lg btn-block" disabled>Current</button></p>
 
     {%for day_str, day_date , month_data in date%}
         {% if current_date.month == month_data %}
@@ -28,6 +29,7 @@
             </div>
         {% endif %}
     {% endfor %}
+    <p><button type="button" class="btn btn-outline-dark btn-lg btn-block" disabled>Previous months</button></p>
 
     {%for month, month_name in date_month%}
         {% if current_date.month > month %}

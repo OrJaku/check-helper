@@ -17,7 +17,6 @@ def date_function():
 def notes_list(request, *args, **kwargs):
     current_date = date_function()
     auto_name = current_date.strftime('%H:%M:%S')
-    current_month = current_date.strftime('%M')
     if request.method == "POST":
         name = request.POST.get("name")
         if name == "" or name == " " or name == "  ":
@@ -47,7 +46,7 @@ def notes_list(request, *args, **kwargs):
     months_list = [
                     "Unknown",
                     "January",
-                    "Febuary",
+                    "February",
                     "March",
                     "April",
                     "May",
