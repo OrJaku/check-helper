@@ -15,8 +15,10 @@ def date_function():
 
 @login_required(login_url='/user_login/')
 def notes_list(request, *args, **kwargs):
-    current_date = date_function()
-    auto_name = current_date.strftime('%H:%M:%S')
+    current_full_date = date_function()
+    current_month = current_full_date.strftime('%B')
+    current_year = current_full_date.strftime('%Y')
+    auto_name = current_full_date.strftime('%H:%M:%S')
     if request.method == "POST":
         name = request.POST.get("name")
         if name == "" or name == " " or name == "  ":
@@ -33,7 +35,7 @@ def notes_list(request, *args, **kwargs):
             description=description,
             user=request.user,
             tag=tag,
-            time=current_date.strftime('%H:%M'),
+            time=current_full_date.strftime('%H:%M'),
             )
         new_note.save()
         return redirect("/notes_list/")
@@ -90,7 +92,7 @@ def notes_list(request, *args, **kwargs):
         del request.session['found_by_tag']
     except KeyError:
         found_by_tag = None
-    auto_name = current_date.strftime('%H:%M:%S')
+    auto_name = current_full_date.strftime('%H:%M:%S')
     founds_list.append(found_by_name)
     founds_list.append(found_by_description)
     founds_list.append(found_by_tag)
@@ -105,8 +107,10 @@ def notes_list(request, *args, **kwargs):
         "founds_list_enumerate": founds_list_enumerate,
         "auto_name": auto_name,
         "unique_tags": unique_tags,
-        "current_date": current_date,
+        "current_full_date": current_full_date,
         "date_month": date_month,
+        "current_month": current_month,
+        "current_year": current_year,
     }
     return render(request, 'notes_list.html', context)
 
