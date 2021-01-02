@@ -17,7 +17,7 @@ def date_function():
 def notes_list(request, *args, **kwargs):
     current_full_date = date_function()
     current_month = current_full_date.strftime('%B')
-    current_year = current_full_date.strftime('%Y')
+    current_year = int(current_full_date.strftime('%Y'))
     auto_name = current_full_date.strftime('%H:%M:%S')
     if request.method == "POST":
         name = request.POST.get("name")
@@ -43,6 +43,7 @@ def notes_list(request, *args, **kwargs):
     days_str = []
     days_date = []
     month_date = []
+    year_date = []
     existing_month_list = []
     existing_month_name_list = []
     months_list = [
@@ -64,13 +65,14 @@ def notes_list(request, *args, **kwargs):
         days_str.append(str(i['date']))
         days_date.append(i['date'])
         month_date.append(i['date'].month)
+        year_date.append(i['date'].year)
         if i['date'].month in existing_month_list:
             pass
         else:
             existing_month_list.append(i['date'].month)
             existing_month_name_list.append(months_list[i['date'].month])
 
-    date = zip(days_str, days_date, month_date)
+    date = zip(days_str, days_date, month_date, year_date)
     date_month = zip(existing_month_list, existing_month_name_list)
 
     notes = Notes.objects.all().filter(user=request.user).order_by('-time')
@@ -100,7 +102,18 @@ def notes_list(request, *args, **kwargs):
 
     unique_tags = Notes.objects.values_list('tag').filter(user=request.user).distinct()
     unique_tags = [tag[0] for tag in unique_tags]
+    print('date',date)
+    print("------------")
+    print("current_full_date", current_full_date)
+    print("------------")
 
+    print("date_month", date_month)
+    print("------------")
+
+    print("current_month", current_month)
+    print("------------")
+
+    print("current_year", current_year)
     context = {
         "notes": notes,
         "date": date,
@@ -109,6 +122,7 @@ def notes_list(request, *args, **kwargs):
         "unique_tags": unique_tags,
         "current_full_date": current_full_date,
         "date_month": date_month,
+        ""
         "current_month": current_month,
         "current_year": current_year,
     }

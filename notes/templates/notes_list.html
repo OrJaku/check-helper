@@ -9,8 +9,8 @@
     {% endfor %}
     <p><button type="button" class="btn btn-outline-dark btn-lg btn-block" disabled>{{current_month}}</button></p>
 
-    {%for day_str, day_date , month_data in date%}
-        {% if current_full_date.month == month_data %}
+    {%for day_str, day_date , month_data, _ in date%}
+        {% if current_full_date.month == month_data and current_full_date.year == current_year%}
             <p>
                 <button class="btn btn-secondary btn-lg btn-block" type="button" data-toggle="collapse" data-target="#coll_day{{day_str}}" aria-expanded="false" aria-controls="coll_day{{day_str}}">
                           {{ day_date }}
@@ -52,6 +52,28 @@
         {% endif %}
     {% endfor %}
 
+    <p><button type="button" class="btn btn-outline-dark btn-lg btn-block" disabled>Previous years</button></p>
+
+    {%for day_str, day_date , month_data, year in date%}
+<!--        {% if current_full_date.year < year %}-->
+        <p>
+            <button class="btn btn-secondary btn-lg btn-block" type="button" data-toggle="collapse" data-target="#coll_year{{year}}" aria-expanded="false" aria-controls="coll_year{{year}}">
+                {{year}}
+            </button>
+        </p>
+        <div class="collapse" id="coll_year{{year}}">
+            <div class="card card-body">
+                <div class="row">
+                    {% for note in notes %}
+                    {% if note.date.year == year %}
+                    {% include 'note_cart.html' %}
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+<!--        {% endif %}-->
+    {% endfor %}
 
 
 </body>
